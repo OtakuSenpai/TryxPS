@@ -20,6 +20,10 @@
 #include "sharedlib.hpp"
 #include "config.hpp"
 
+// This is a very basic plugin interface,made for my IRC bot.
+// If you want to make your own bot then change this class 
+// according to your needs. 
+
 namespace Tryx{
    class PluginInterface 
    {

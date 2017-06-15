@@ -33,9 +33,6 @@ namespace Tryx {
        typedef char * (*Plugin_TextFunc)();
        
        //------------------------------------------------------------------- //
-       
-       //Handle of the loaded shared library
-       SharedLib::Handle sharedLibraryHandle;
        //Number of references that exist to the shared library
        size_t *referenceCount;
        
@@ -52,7 +49,7 @@ namespace Tryx {
     public: 
        //Initializes and loads a plugin
        //Parameter is filename of the plugin to load
-       TRYX_API_EXP Plugin(const std::string &filename);
+       TRYX_API_EXP Plugin(SharedLib::Handle handle,const std::string &filename);
        //Copies an existing plugin instance
        TRYX_API_EXP Plugin(const Plugin &other);
        //Unloads the plugin
@@ -63,10 +60,12 @@ namespace Tryx {
          return this->getEngineVersionAddress();
        }
        
-       TRYX_API_EXP Plugin_TextFunc* getTextData(const char* funcname,
-                                                     const std::string& filename);
-       TRYX_API_EXP PluginInterface* getNewPlugin(const char* funcname,
-                                                     const std::string& filename);
+       TRYX_API_EXP Plugin_TextFunc* getTextData(SharedLib::Handle handle,
+                                                 const char* funcname,
+                                                 const std::string& filename);
+       TRYX_API_EXP PluginInterface* getNewPlugin(SharedLib::Handle handle,
+                                                  const char* funcname,
+                                                  const std::string& filename);
        
        TRYX_API_EXP void setFileName(char* name);
        TRYX_API_EXP char* getName() { return pluginName; }
