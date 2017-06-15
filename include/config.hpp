@@ -40,11 +40,15 @@
    #ifdef TRYX_STATICLIB
       #define TRYX_API_EXP
    #else
-      #ifdef TRYX_SOURCE //Define this in the derived plugin
-      //If we are building the DLL,export the symbols tagged like this
+      //Define this in the derived plugin 
+      #ifdef TRYX_SOURCE 
+         //If we are building the DLL,export the symbols tagged like this
+         //Add this before a symbol to be exported
          #define TRYX_API_EXP __declspec(dllexport)
+         //Add this in the source file of the derived plugin
          #define SET_PLUGIN_VERS(x) extern "C"{__declspec(dllexport) 
             const char * getPluginVers(){ return x;}}
+         //Add this in the source file of the derived plugin
          #define SET_PLUGIN_NAME(x) extern "C"{__declspec(dllexport) 
             const char * getPluginName(){ return x;}}
       #else
