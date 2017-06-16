@@ -28,7 +28,7 @@ namespace Tryx {
   class Plugin {
     private:
        //Signature for the plugin's registration function
-       typedef PluginInterface* *(*PluginFactoryFunc)();
+       typedef PluginInterface* (*PluginFactoryFunc)();
        //Signature to query for plugin texts
        typedef char * (*Plugin_TextFunc)();
        
@@ -40,11 +40,20 @@ namespace Tryx {
        char* pluginType;
        char* pluginName;
        char* pluginVersion;
-       PluginFactoryFunc funcHandle;
-       Plugin_TextFunc textHandle;
+       PluginFactoryFunc pluginHandle;
        
+       TRYX_API_EXP void setName(char* name);
+       TRYX_API_EXP void setType(char* type);
+       TRYX_API_EXP void setVers(char* vers);
+       TRYX_API_EXP void setFileName(char* name);
+       
+       TRYX_API_EXP Plugin_TextFunc* getTextData(SharedLib::Handle handle,
+                                                 const char* funcname,
+                                                 const std::string& filename);
+       TRYX_API_EXP PluginInterface* getNewPlugin(SharedLib::Handle handle,
+                                                  const char* funcname,
+                                                  const std::string& filename);
        void clearMembers();
-          
        
     public: 
        //Initializes and loads a plugin
@@ -54,26 +63,10 @@ namespace Tryx {
        TRYX_API_EXP Plugin(const Plugin &other);
        //Unloads the plugin
        TRYX_API_EXP ~Plugin();
-
-       //Queries the plugin for its expected engine version
-       TRYX_API_EXP int getEngineVersion() const {
-         return this->getEngineVersionAddress();
-       }
        
-       TRYX_API_EXP Plugin_TextFunc* getTextData(SharedLib::Handle handle,
-                                                 const char* funcname,
-                                                 const std::string& filename);
-       TRYX_API_EXP PluginInterface* getNewPlugin(SharedLib::Handle handle,
-                                                  const char* funcname,
-                                                  const std::string& filename);
-       
-       TRYX_API_EXP void setFileName(char* name);
        TRYX_API_EXP char* getName() { return pluginName; }
        TRYX_API_EXP char* getType() { return pluginType; }
        TRYX_API_EXP char* getVers() { return pluginVersion; }
-       TRYX_API_EXP void setName(char* name);
-       TRYX_API_EXP void setType(char* type);
-       TRYX_API_EXP void setVers(char* vers);
          
        //Creates a copy of the plugin instance
        Plugin &operator =(const Plugin &other);
