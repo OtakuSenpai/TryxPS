@@ -32,10 +32,6 @@ namespace Tryx {
        //Signature to query for plugin texts
        typedef char * (*Plugin_TextFunc)();
        
-       //------------------------------------------------------------------- //
-       //Number of references that exist to the shared library
-       size_t *referenceCount;
-       
        char* filename;
        char* pluginType;
        char* pluginName;

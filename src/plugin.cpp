@@ -25,49 +25,40 @@ using namespace std;
 
 namespace Tryx {
   
-  // Parameterized ctor to load a plugin dll and initiate it inside
-  // the class object.Used as the primary way of loading plugins
-  // Parameters are:-
-  // SharedLib::Handle handle - A 
-  
-  Plugin::Plugin(SharedLib::Handle handle,const std::string &filename) :
-    referenceCount(0) {
+  Plugin::Plugin(SharedLib::Handle& handle,std::string& filename) {
     try {
       Plugin_TextFunc text_func;
+      setFileName(const_cast<char*>(filename.c_str));
       
       pluginHandle = getNewPlugin(handle,"makePlugin",filename);
       if(funcHandle != nullptr) { 
-         text_func = getTextData(handle,"getPluginName",filename);
-         setName(text_func());
-      
-         text_func = getTextData(handle,"getPluginType",filename);
-         setType(text_func());
-      
-         text_func = getTextData(handle,"getPluginVers",filename);
-         setVers(text_func());
-         
-         // Initialize a new shared library reference counter
-         this->referenceCount = new size_t(1);
-       }
+        
+        // Get plugin name from the dynamic library
+        text_func = getTextData(handle,"getPluginName",filename);
+        setName(text_func()); // Set plugin name
+        
+        // Get plugin type from the dynamic library 
+        text_func = getTextData(handle,"getPluginType",filename);
+        setType(text_func()); //Set plugin type
+        
+        // Get plugin version from the dynamic library
+        text_func = getTextData(handle,"getPluginVers",filename);
+        setVers(text_func()); // Set plugin version 
+      }
     }
     catch(std::exception& e) {
       throw;
     }
   }
-
-  // Creates a copy of a plugin that has already been loaded.
-  // Required to provide correct semantics for storing plugins in
-  // an STL map container.
-  // Other plugin instance to copy
   
-  Plugin::Plugin(const Plugin &other) :
-    referenceCount(other.referenceCount) {
-
-    // Increase DLL reference counter
-    if(this->referenceCount) {
-      ++(*this->referenceCount);
-    }
+  Plugin::Plugin(const Plugin& other)
+  {
+    setName(other.pluginName);
+    setType(other.pluginType);
+    setVers(other.pluginVersion);
+    setFileName(other.filename);
   }
+  
   void Plugin :: clearMembers()
   {
    delete[] pluginName;
@@ -79,21 +70,13 @@ namespace Tryx {
    pluginName=nullptr;
    filename=nullptr;
    pluginVersion=nullptr;
-   size_t remainingReferences = --*(this->referenceCount);
-   if(remainingReferences == 0) {
-      delete this->referenceCount;
-      referenceCount = nullptr;
-     }
   } 
-
-  // Destroys the plugin, unloading its library when no more references
-  // to it exist.
   
   Plugin :: ~Plugin() {
       clearMembers();
     }
   }
-
+  
   Plugin_TextFunc* Plugin :: getTextData(SharedLib::Handle handle,
                                          const char* funcname,
                                          const std::string& filename)
@@ -127,6 +110,7 @@ namespace Tryx {
    pluginName=new char[strlen(nm)+1];
    strcpy(pluginName,nm);
   }
+  
   void Plugin :: setType(char * nm)
   {
    pluginType=new char[strlen(nm)+1];
