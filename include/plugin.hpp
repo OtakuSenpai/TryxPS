@@ -43,11 +43,6 @@ namespace Tryx {
        // Used in the dtor only.
        void clearMembers();
        
-       TRYX_API_EXP void setName(char* name); // Set name.
-       TRYX_API_EXP void setType(char* type); // Set type.
-       TRYX_API_EXP void setVers(char* vers); // Set version 
-       TRYX_API_EXP void setFileName(char* name); // Set filename  
-       
     public: 
        // Parameterized ctor to load a plugin dll and initiate it inside
        // the class object.Used as the primary way of loading plugins
@@ -70,18 +65,23 @@ namespace Tryx {
        // returns it. If found then returns it,else returns nullptr.
        TRYX_API_EXP Plugin_TextFunc* getTextData(SharedLib::Handle handle,
                                          const char* funcname,
-                                         const std::string& filename);
+                                         std::string& filename);
        
        // Gets a PluginInterface object from the dynamic library.
        // If found,then returns it,else returns nullptr.
        TRYX_API_EXP PluginInterface* getNewPlugin(SharedLib::Handle handle,
                                           const char* funcname,
-                                          const std::string& filename);
+                                          std::string& filename);
                                           
-       TRYX_API_EXP char* getName() { return pluginName; } // Get name.
-       TRYX_API_EXP char* getType() { return pluginType; } // Get type.
-       TRYX_API_EXP char* getVers() { return pluginVersion; } // Get version.
-       TRYX_API_EXP char* getFilename() { return filename; } // Get filename. 
+       TRYX_API_EXP char* getName() const { return pluginName; } // Get name.
+       TRYX_API_EXP char* getType() const { return pluginType; } // Get type.
+       TRYX_API_EXP char* getVers() const { return pluginVersion; } // Get version.
+       TRYX_API_EXP char* getFilename() const { return filename; } // Get filename. 
+       
+       TRYX_API_EXP void setName(char* name); // Set name.
+       TRYX_API_EXP void setType(char* type); // Set type.
+       TRYX_API_EXP void setVers(char* vers); // Set version 
+       TRYX_API_EXP void setFileName(char* name); // Set filename
          
        //Creates a copy of the plugin instance.
        TRYX_API_EXP Plugin &operator =(const Plugin &other);
