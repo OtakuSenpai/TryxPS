@@ -79,13 +79,13 @@ namespace Tryx {
   
   Plugin_TextFunc* Plugin :: getTextData(SharedLib::Handle handle,
                                          const char* funcname,
-                                         const std::string& filename)
+                                         std::string& filename)
   {
    Plugin_TextFunc textHandle;
    if(!handle) handle = SharedLib::Load(filename);     
       if(handle != nullptr){
          textHandle = SharedLib::GetFunctionPointer
-                      <Plugin_TextFunc>(this->sharedLibraryHandle,funcname);
+                      <Plugin_TextFunc>(handle,funcname);
          if(funcHandle != nullptr) return textHandle();             
       }
    return nullptr;
@@ -93,13 +93,13 @@ namespace Tryx {
   
   PluginInterface* Plugin :: getNewPlugin(SharedLib::Handle handle,
                                           const char* funcname,
-                                          const std::string& filename)
+                                          std::string& filename)
   {
    PluginFactoryFunc funcHandle; 
    if(!handle) handle = SharedLib::Load(filename);     
       if(handle != nullptr){
          funcHandle = SharedLib::GetFunctionPointer
-                      <PluginFactoryFunc>(this->sharedLibraryHandle,funcname);
+                      <PluginFactoryFunc>(handle,funcname);
          if(funcHandle != nullptr) return funcHandle();             
       }
    return nullptr;
