@@ -30,7 +30,7 @@ namespace Tryx {
       Plugin_TextFunc text_func;
       setFileName(const_cast<char*>(filename.c_str));
       
-      pluginHandle = getNewPlugin(handle,"makePlugin",filename);
+      funcHandle = getNewPlugin(handle,"makePlugin",filename);
       if(funcHandle != nullptr) { 
         
         // Get plugin name from the dynamic library
