@@ -17,6 +17,7 @@
 #ifdef TRYX_LINUX
 #include <sys/types.h>
 #include <dirent.h>
+#include <sys/stat.h>
 
 #elif TRYX_WIN32
 #define WIN32_LEAN_AND_MEAN
@@ -110,3 +111,7 @@ void Tryx::Kernel::loadPlugins(const std::string& path,bool addIt) {
    closedir(dp);
  #endif
 }    
+
+void Tryx::Kernel::unloadPlugins() {
+  loadPlugins.deleteList();
+}  

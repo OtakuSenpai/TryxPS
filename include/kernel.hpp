@@ -28,16 +28,20 @@ namespace Tryx {
   class Kernel {
 
     //Map of plugins by their associated file names
-    typedef TryxList<std::string,Plugin> PluginMap;
+    typedef TryxList<std::string,Plugin*> PluginMap;
 
     public: 
        
-       Kernel() : loadedPlugins{}
-       ~Kernel() {}
+       TRYX_API_EXP Kernel() : loadedPlugins{}
+       TRYX_API_EXP ~Kernel() { unloadPlugins(); }
          
-       //Loads a plugin
-       //File the plugin will be loaded from
-       TRYX_API void loadPlugins(const std::string& path,bool addIt);
+       // Loads all plugins present in a directory.
+       TRYX_API_EXP void loadPlugins(const std::string& path,bool addIt);
+       
+       // Unloads all plugins 
+       TRYX_API_EXP void unloadPlugins();
+       
+       TRYX_API_EXP Plugin::PluginFactoryFunc retFuncHandle(std::string& identifier);
        
     private:
        //All plugins currently loaded

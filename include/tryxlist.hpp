@@ -41,7 +41,7 @@ namespace Tryx {
       int size() const {
         Node* temp = root;
         int count = 0;
-        while(temp->next != nullptr) {
+        while(temp != nullptr) {
           count++; temp = temp->next;
         }
         return count;
@@ -144,17 +144,6 @@ namespace Tryx {
         }
         else throw std::runtime_error("tryxlist.hpp : line 121,parameter to be deleted not found.");
       }
-        
-    private:
-      
-      void display() {
-        Node* temp = root;
-        while(temp != nullptr) {  
-          std::cout<<"Parameter one is: "<<temp->_name<<std::endl
-                   <<"Parameter two is: "<<temp->_data<<std::endl;
-          temp = temp->next;         
-        }
-      }
       
       void deleteList() {
         Node* current = root;
@@ -166,6 +155,17 @@ namespace Tryx {
         }
         root = nullptr;
       } 
+        
+    private:
+      
+      void display() {
+        Node* temp = root;
+        while(temp != nullptr) {  
+          std::cout<<"Parameter one is: "<<temp->_name<<std::endl
+                   <<"Parameter two is: "<<temp->_data<<std::endl;
+          temp = temp->next;         
+        }
+      }
       
       struct Node {
         T _name;
