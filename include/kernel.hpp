@@ -32,16 +32,16 @@ namespace Tryx {
 
     public: 
        
-       TRYX_API_EXP Kernel() : loadedPlugins{}
-       TRYX_API_EXP ~Kernel() { unloadPlugins(); }
+       Kernel() : loadedPlugins{}
+       ~Kernel() { unloadPlugins(); }
          
        // Loads all plugins present in a directory.
-       TRYX_API_EXP void loadPlugins(const std::string& path,bool addIt);
+       void loadPlugins(const std::string& path,bool addIt);
        
        // Unloads all plugins 
-       TRYX_API_EXP void unloadPlugins();
+       void unloadPlugins();
        
-       TRYX_API_EXP Plugin::PluginFactoryFunc retFuncHandle(std::string& identifier);
+       Plugin::PluginFactoryFunc retFuncHandle(std::string& identifier);
        
     private:
        //All plugins currently loaded
