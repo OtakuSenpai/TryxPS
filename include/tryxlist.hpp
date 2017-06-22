@@ -38,15 +38,6 @@ namespace Tryx {
         else throw std::runtime_error("tryxlist.hpp : line 18,list already exists.\n");
       }
       
-      void display() {
-        Node* temp = root;
-        while(temp->next != nullptr) {  
-          std::cout<<"Parameter one is: "<<temp->_name<<std::endl
-                   <<"Parameter two is: "<<temp->_data<<std::endl;
-          temp = temp->next;         
-        }
-      }
-      
       int size() const {
         Node* temp = root;
         int count = 0;
@@ -84,7 +75,7 @@ namespace Tryx {
         root = prev;
       } 
        
-      void unique_it() {
+      void uniqueIt() {
         Node *ptr1, *ptr2, *dup;
         ptr1 = root;
  
@@ -94,7 +85,7 @@ namespace Tryx {
  
           while (ptr2->next != nullptr)
           {
-            if (ptr1->data == ptr2->next->data)
+            if (ptr1->_data == ptr2->next->_data)
             {
               dup = ptr2->next;
               ptr2->next = ptr2->next->next;
@@ -155,7 +146,16 @@ namespace Tryx {
       }
         
     private:
-    
+      
+      void display() {
+        Node* temp = root;
+        while(temp != nullptr) {  
+          std::cout<<"Parameter one is: "<<temp->_name<<std::endl
+                   <<"Parameter two is: "<<temp->_data<<std::endl;
+          temp = temp->next;         
+        }
+      }
+      
       void deleteList() {
         Node* current = root;
         Node* next;
