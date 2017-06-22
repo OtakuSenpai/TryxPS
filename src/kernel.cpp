@@ -57,9 +57,7 @@ void Tryx::Kernel::loadPlugins(const std::string& path,bool addIt) {
           {
             curPlugin = new Plugin(static_cast<SharedLib::Handle>
                                 (dllHandle),std::string(fd.cFileName));
-            loadedPlugins.push_back(std::string(curPlugin.getName()),
-                          curPlugin.getNewPlugin(static_cast<SharedLib::Handle>
-                          (dllHandle),"makePlugin",std::string(fd.cFileName));
+            loadedPlugins.push_back(std::string(curPlugin.getName()),curPlugin);
             delete curPlugin; curPlugin = nullptr;
           }
           FreeLibrary(dllHandle);
@@ -68,7 +66,7 @@ void Tryx::Kernel::loadPlugins(const std::string& path,bool addIt) {
       catch(...)
       {
         if (dllHandle != NULL) FreeLibrary(dllHandle);
-        throw std::runtime_error("kernel.cpp : Line 36, \
+        throw std::runtime_error("kernel.cpp : Line 34, \
             error in finding .dlls in the directory.");
       }
     } while (FindNextFile(hFind, &fd));
@@ -97,17 +95,16 @@ void Tryx::Kernel::loadPlugins(const std::string& path,bool addIt) {
           dllHandle = SharedLib::Load(dirp->d_name); 
           curPlugin = new Plugin(static_cast<SharedLib::Handle>
                               (dllHandle),std::string(dirp->d_name));
-          loadedPlugins.push_back(std::string(curPlugin.getName()),
-                        curPlugin.getNewPlugin(static_cast<SharedLib::Handle>
-                        (dllHandle),"makePlugin",std::string(dirp->d_name));
+          loadedPlugins.push_back(std::string(curPlugin.getName()),curPlugin);
           delete curPlugin; curPlugin = nullptr;
         }
         SharedLib::Unload(dllHandle);
       } 
       catch(...)
       {
-        if (dllHandle != NULL) SharedLib::Unload(dllHandle);
-        throw std::runtime_error("kernel.cpp : Line 81,error in finding .dlls in the directory.");
+        if (dllHandle != nullptr) SharedLib::Unload(dllHandle);
+        throw std::runtime_error("kernel.cpp : Line 77,error \
+                          in finding .dlls in the directory.");
       } 
    }     
    closedir(dp);

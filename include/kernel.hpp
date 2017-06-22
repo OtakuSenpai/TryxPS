@@ -28,7 +28,7 @@ namespace Tryx {
   class Kernel {
 
     //Map of plugins by their associated file names
-    typedef TryxList<std::string,Plugin::PluginFactoryFunc> PluginMap;
+    typedef TryxList<std::string,Plugin> PluginMap;
 
     public: 
        
