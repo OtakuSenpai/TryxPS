@@ -35,7 +35,7 @@ namespace Tryx {
           Node* nn = new Node(param1,param2);
           root = nn; 
         }
-        else throw std::runtime_error("tryxlist.hpp : line 18,list already exists.\n");
+        else throw std::runtime_error("tryxlist.hpp : line 33,list already exists.\n");
       }
       
       int size() const {
@@ -58,7 +58,18 @@ namespace Tryx {
             current = current->next;
           }
         }
-        else throw std::runtime_error("tryxlist.hpp : line 44, searching on an empty list.\n");
+        else throw std::runtime_error("tryxlist.hpp : line 50, searching on an empty list.\n");
+      }
+      
+      U retDataAtPos(T identifier) {
+        int pos = search(identifier);
+        Node* current = root;
+        for(int j = 0; j<pos; j++) 
+          current = current->next;
+        if(identifier == current->_name)
+          return current->_data;
+        else 
+          throw std::runtime_error("tryxlist.hpp : line 64,couldn't find the entry in the list.");
       }
       
       void reverse() {
@@ -97,7 +108,7 @@ namespace Tryx {
         }
       } 
        
-      void push_back(T param1,U param2) {
+      void pushBack(T param1,U param2) {
         if(root != nullptr) {
           Node* nn = new Node(param1,param2);
           Node* temp = root;
@@ -107,7 +118,7 @@ namespace Tryx {
         else create(param1,param2);
       }
       
-      void pop_back() {
+      void popBack() {
         if(root != nullptr) {
           Node* current = root;
           Node* prev;
@@ -121,7 +132,7 @@ namespace Tryx {
           prev->next = nullptr;
           delete current;
         }
-        else throw std::runtime_error("tryxlist.hpp : line 104,list has not been created.\n");
+        else throw std::runtime_error("tryxlist.hpp : line 120,list has not been created.\n");
       }
       
       void pop(T param1) {
@@ -142,7 +153,7 @@ namespace Tryx {
             }
           }
         }
-        else throw std::runtime_error("tryxlist.hpp : line 121,parameter to be deleted not found.");
+        else throw std::runtime_error("tryxlist.hpp : line 137,parameter to be deleted not found.");
       }
       
       void deleteList() {
@@ -180,7 +191,7 @@ namespace Tryx {
             _data = other._data;
             next = other.next;
           }
-          catch(std::exception& e){ std::cerr<<"tryxlist.hpp : line 162,caught exception: "<<e.what(); }           
+          catch(std::exception& e){ std::cerr<<"tryxlist.hpp : line 187,caught exception: "<<e.what(); }           
         }
         Node* operator=(const Node* other) {
           try {
@@ -188,7 +199,7 @@ namespace Tryx {
             Node* temp = new Node(other);
             return temp;
           }
-          catch(std::exception& e){ std::cerr<<"tryxlist.hpp : line 170,caught exception: "<<e.what(); }
+          catch(std::exception& e){ std::cerr<<"tryxlist.hpp : line 195,caught exception: "<<e.what(); }
         }
         void free() {
         delete next; 

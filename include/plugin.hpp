@@ -77,6 +77,9 @@ namespace Tryx {
        TRYX_API_EXP char* getType() const { return pluginType; } // Get type.
        TRYX_API_EXP char* getVers() const { return pluginVersion; } // Get version.
        TRYX_API_EXP char* getFilename() const { return filename; } // Get filename. 
+       TRYX_API_EXP PluginFactoryFunc getFuncHandle() const { // Get the function handle
+         return funcHandle();
+       }
        
        TRYX_API_EXP void setName(char* name); // Set name.
        TRYX_API_EXP void setType(char* type); // Set type.
