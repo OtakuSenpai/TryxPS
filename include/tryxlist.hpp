@@ -25,7 +25,7 @@ namespace Tryx {
   class TryxList {
     public:
       TryxList() {
-        root = new Node;
+        root = nullptr;
       }
 
       ~TryxList() { deleteList(); }
@@ -35,12 +35,12 @@ namespace Tryx {
           Node* nn = new Node(param1,param2);
           root = nn; 
         }
-        else throw std::runtime_error("tryxlist.hpp : line 37,list already exists.\n");
+        else throw std::runtime_error("tryxlist.hpp : line 18,list already exists.\n");
       }
       
       void display() {
         Node* temp = root;
-        while(temp != nullptr) {
+        while(temp->next != nullptr) {  
           std::cout<<"Parameter one is: "<<temp->_name<<std::endl
                    <<"Parameter two is: "<<temp->_data<<std::endl;
           temp = temp->next;         
@@ -50,8 +50,8 @@ namespace Tryx {
       int size() const {
         Node* temp = root;
         int count = 0;
-        while(temp != nullptr) {
-          ++count; temp = temp->next;
+        while(temp->next != nullptr) {
+          count++; temp = temp->next;
         }
         return count;
       }
@@ -67,16 +67,16 @@ namespace Tryx {
             current = current->next;
           }
         }
-        else throw std::runtime_error("tryxlist.hpp : line 76, searching on an empty list.\n");
+        else throw std::runtime_error("tryxlist.hpp : line 44, searching on an empty list.\n");
       }
       
       void reverse() {
         Node* prev   = nullptr;
         Node* current = root;
         Node* next;
-        while (current != nullptr)
+        while(current != nullptr)
         {
-          next  = current->next;  
+          next = current->next;  
           current->next = prev;   
           prev = current;
           current = next;
@@ -109,24 +109,28 @@ namespace Tryx {
       void push_back(T param1,U param2) {
         if(root != nullptr) {
           Node* nn = new Node(param1,param2);
-          nn->next = root;
-          root = nn;
+          Node* temp = root;
+          while(temp->next != nullptr) temp = temp->next;
+          temp->next = nn; nn->next = nullptr;
         }
-        else throw std::runtime_error("tryxlist.hpp : line 120,list has not been created.\n");
+        else create(param1,param2);
       }
       
       void pop_back() {
         if(root != nullptr) {
-          Node *temp, *prev;
-          temp = prev = root;
-          while(temp->next != nullptr) {
-            prev = temp;
-            temp = temp->next;
+          Node* current = root;
+          Node* prev;
+          while(1) {
+            if(current->next == nullptr)
+            break;
+            prev = current;
+            current = current->next;
           }
-          prev->next =nullptr;
-          delete prev; prev = nullptr;
+          std::cout<<"Prev: "<<prev->_data<<std::endl;
+          prev->next = nullptr;
+          delete current;
         }
-        else throw std::runtime_error("tryxlist.hpp : line 129,list has not been created.\n");
+        else throw std::runtime_error("tryxlist.hpp : line 104,list has not been created.\n");
       }
       
       void pop(T param1) {
@@ -147,7 +151,7 @@ namespace Tryx {
             }
           }
         }
-        else throw std::runtime_error("tryxlist.hpp : line 145,parameter to be deleted not found.");
+        else throw std::runtime_error("tryxlist.hpp : line 121,parameter to be deleted not found.");
       }
         
     private:
@@ -155,7 +159,7 @@ namespace Tryx {
       void deleteList() {
         Node* current = root;
         Node* next;
-        while (current != NULL) {
+        while (current != nullptr) {
          next = current->next;
          delete current;
          current = next;
@@ -176,18 +180,19 @@ namespace Tryx {
             _data = other._data;
             next = other.next;
           }
-          catch(std::exception& e){ std::cerr<<"tryxlist.hpp : line 173,caught exception: "<<e.what(); }           
+          catch(std::exception& e){ std::cerr<<"tryxlist.hpp : line 162,caught exception: "<<e.what(); }           
         }
         Node* operator=(const Node* other) {
           try {
-            Node* tmp_node = new Node(other);
-            delete next;
-            next = tmp_node;
-            return *this;
+            free();
+            Node* temp = new Node(other);
+            return temp;
           }
-          catch(std::exception& e){ std::cerr<<"tryxlist.hpp : line 181,caught exception: "<<e.what(); }
+          catch(std::exception& e){ std::cerr<<"tryxlist.hpp : line 170,caught exception: "<<e.what(); }
         }
-        
+        void free() {
+        delete next; 
+        }
         ~Node() {}
       };  
     
