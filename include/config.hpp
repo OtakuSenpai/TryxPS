@@ -14,6 +14,8 @@
 // all copies or substantial portions of the Software.                           // 
 ///////////////////////////////////////////////////////////////////////////////////
 
+#include "plugininterface.hpp"
+
 #pragma once
 #ifndef CONFIG_HPP
 #define CONFIG_HPP
