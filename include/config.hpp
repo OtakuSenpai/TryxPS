@@ -48,16 +48,16 @@
          //Add this before a symbol to be exported
          #define TRYX_API_EXP __declspec(dllexport)
          //This sets the name of the new plugin dll
-         #define TRYX_DECL_PLUGIN(x) extern "C"{__declspec(dllexport) 
+         #define TRYX_DECL_PLUGIN(x) extern "C"{__declspec(dllexport) \
             PluginInterface * makePlugin(){ return new x;}}
          //Add this in the source file of the derived plugin
-         #define SET_PLUGIN_VERS(x) extern "C"{__declspec(dllexport) 
+         #define SET_PLUGIN_VERS(x) extern "C"{__declspec(dllexport) \
             const char * getPluginVers(){ return x;}}
          //Add this in the source file of the derived plugin
-         #define SET_PLUGIN_NAME(x) extern "C"{__declspec(dllexport) 
+         #define SET_PLUGIN_NAME(x) extern "C"{__declspec(dllexport) \
             const char * getPluginName(){ return x;}}
          //Add this in the source file of the derived plugin
-         #define SET_PLUGIN_TYPE(x) extern "C"{__declspec(dllexport)
+         #define SET_PLUGIN_TYPE(x) extern "C"{__declspec(dllexport) \
             const char * getPluginType(){ return x;}}   
       #else
       // If we are consuming the DLL, import the symbols tagged like this
@@ -70,13 +70,13 @@
    #else
       #if defined TRYX_SOURCE
          #define TRYX_API_EXP __attribute__((visibility("default")))
-         #define TRYX_DECL_PLUGIN(x) extern "C"{__declspec(dllexport) 
-            PluginInterface * makePlugin(){ return new x;}}
-         #define SET_PLUGIN_Vers(x) extern "C"{__attribute__ ((dllexport))
+         #define TRYX_DECL_PLUGIN(x) extern "C"{__declspec(dllexport) \
+            Tryx::PluginInterface * makePlugin(){ return new Tryx::PluginInterface; }}
+         #define SET_PLUGIN_Vers(x) extern "C"{__attribute__ ((dllexport)) \
              const char * getPluginVers(){ return x;}}
-         #define SET_PLUGIN_NAME(x) extern "C"{__attribute__ ((dllexport))
+         #define SET_PLUGIN_NAME(x) extern "C"{__attribute__ ((dllexport)) \
              const char * getPluginName(){ return x;}}
-         #define SET_PLUGIN_TYPE(x) extern "C"{__declspec(dllexport)
+         #define SET_PLUGIN_TYPE(x) extern "C"{__declspec(dllexport) \
             const char * getPluginType(){ return x;}}      
       #else
          #define TRYX_API_IMP __attribute__ ((visibility ("default")))

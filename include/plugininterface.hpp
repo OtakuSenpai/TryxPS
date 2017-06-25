@@ -22,6 +22,7 @@
 // according to your needs. 
 
 namespace Tryx{
+   
    class PluginInterface 
    {
       public:
