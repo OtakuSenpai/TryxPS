@@ -28,7 +28,7 @@ namespace Tryx {
   Plugin::Plugin(SharedLib::Handle& handle,std::string& filename) {
     try {
       Plugin_TextFunc text_func;
-      setFileName(const_cast<char*>(filename.c_str));
+      setFileName(filename.c_str);
       
       funcHandle = getNewPlugin(handle,"makePlugin",filename);
       if(funcHandle != nullptr) { 

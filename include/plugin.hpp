@@ -29,7 +29,7 @@ namespace Tryx {
   class Plugin {
     private:
        //Signature for the plugin's registration function
-       typedef PluginInterface* *(*PluginFactoryFunc)();
+       typedef PluginInterface* (*PluginFactoryFunc)();
        //Signature to query for plugin texts
        typedef char * (*Plugin_TextFunc)();
        
@@ -78,7 +78,7 @@ namespace Tryx {
        TRYX_API_EXP char* getVers() const { return pluginVersion; } // Get version.
        TRYX_API_EXP char* getFilename() const { return filename; } // Get filename. 
        TRYX_API_EXP PluginFactoryFunc getFuncHandle() const { // Get the function handle
-         return funcHandle();
+         return reinterpret_cast<PluginInterface*>(funcHandle());
        }
        
        TRYX_API_EXP void setName(char* name); // Set name.

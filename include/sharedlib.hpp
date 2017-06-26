@@ -43,7 +43,7 @@ namespace Tryx{
       public:
           typedef HMODULE Handle;
       
-          TRYX_API static Handle Load(const std::string& path){
+          TRYX_API_EXP static Handle Load(const std::string& path){
              std::string pathWithExtension = path + std::string(".dll");
              HMODULE mHandle = LoadLibraryA(pathWithExtension.c_str());
              if(mHandle == nullptr){
@@ -52,7 +52,7 @@ namespace Tryx{
              return mHandle;
           }
           
-          TRYX_API static Handle Load(const char* path){
+          TRYX_API_EXP static Handle Load(const char* path){
            
              std::string pathWithExtension; pathWithExtension.assign(path);
              pathWithExtension = pathWithExtension + std::string(".dll");
@@ -63,7 +63,7 @@ namespace Tryx{
              return mHandle;
           }
           
-          TRYX_API static void Unload(Handle sharedLibHandle){
+          TRYX_API_EXP static void Unload(Handle sharedLibHandle){
              bool result = FreeLibrary(sharedLibHandle);
              if(result == false){
                 throw std::runtime_error("sharedlib.hpp : Line 49,couldn't unload dll.");
@@ -74,7 +74,7 @@ namespace Tryx{
           //in which the function will be looked up,plus the name of the function to
           //look up. Return type is a pointer to the specified function.
           
-          template<typename TSignature>
+          TRYX_API_EXP template<typename TSignature>
           static TSignature *GetFunctionPointer(Handle sharedLibHandle,
                             const char* funcname)
           {
@@ -96,7 +96,7 @@ class SharedLib{
    public:
       typedef void* Handle;
       
-      TRYX_API static Handle Load(const std::string& path){
+      TRYX_API_EXP static Handle Load(const std::string& path){
          std::string pathWithExtension = std::string("./lib") + path + std::string(".so");
          void* sharedObject = dlopen(pathWithExtension.c_str(),RTLD_NOW);
          if(sharedObject == nullptr){
@@ -106,18 +106,18 @@ class SharedLib{
          return sharedObject;
       }
       
-      TRYX_API static Handle Load(const char* path){
+      TRYX_API_EXP static Handle Load(const char* path){
           std::string temp; temp.assign(path);
           temp = std::string("./lib") + temp + std::string(".so");
           void* sharedObject = dlopen(temp.c_str(),RTLD_NOW);
          if(sharedObject == nullptr){
-            throw std::runtime_error(
-               std::string("sharedlib.hpp : Line 93,couldn't load '") + pathWithExtension + "'");
+            std::string s = "sharedlib.hpp : Line 93,couldn't load '" + temp + "'";
+            throw std::runtime_error(s);
          }
          return sharedObject;
       } 
       
-      TRYX_API static void Unload(Handle sharedLibHandle){
+      TRYX_API_EXP static void Unload(Handle sharedLibHandle){
          int result = dlclose(sharedLibHandle);
          if(result != 0){
             throw std::runtime_error("sharedlib.hpp : Line 93,couldn't unload shared object.");
@@ -125,7 +125,7 @@ class SharedLib{
       }
       
       template<typename TSignature>
-      static TSignature *GetFunctionPointer(Handle sharedLibHandle,
+      TRYX_API_EXP TSignature GetFunctionPointer(Handle sharedLibHandle,
                         const char* funcname){
          dlerror();
          void* funcAddress = dlsym(sharedLibHandle,funcname);
@@ -134,7 +134,7 @@ class SharedLib{
             throw std::runtime_error
             ("sharedlib.hpp : Line 104,couldn't find exported function.");
          } 
-         return reinterpret_cast<TSignature*>(funcAddress);  
+         return reinterpret_cast<TSignature>(funcAddress);  
       }
 };
 

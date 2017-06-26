@@ -27,9 +27,9 @@ namespace Tryx{
    {
       public:
          PluginInterface(){}
-         virtual ~PluginInterface(){}
+         virtual ~PluginInterface()=default;
 
-         virtual char* onCommand(const char* data)=default;
+         virtual char* onCommand(const char* data)=0;
    };
 } //namespace Tryx
 
