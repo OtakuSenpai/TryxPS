@@ -63,7 +63,7 @@ namespace Tryx {
 
        // Gets a text function handle from the dynamic library and 
        // returns it. If found then returns it,else returns nullptr.
-       TRYX_API_EXP Plugin_TextFunc* getTextData(SharedLib::Handle handle,
+       TRYX_API_EXP Plugin::Plugin_TextFunc getTextData(SharedLib::Handle handle,
                                          const char* funcname,
                                          std::string& filename);
        
@@ -84,7 +84,7 @@ namespace Tryx {
        TRYX_API_EXP void setName(char* name); // Set name.
        TRYX_API_EXP void setType(char* type); // Set type.
        TRYX_API_EXP void setVers(char* vers); // Set version 
-       TRYX_API_EXP void setFileName(char* name); // Set filename
+       TRYX_API_EXP void setFileName(const char* name); // Set filename
          
        //Creates a copy of the plugin instance.
        TRYX_API_EXP Plugin &operator =(const Plugin &other);

@@ -75,14 +75,14 @@ namespace Tryx{
           //look up. Return type is a pointer to the specified function.
           
           TRYX_API_EXP template<typename TSignature>
-          static TSignature *GetFunctionPointer(Handle sharedLibHandle,
+          static TSignature GetFunctionPointer(Handle sharedLibHandle,
                             const char* funcname)
           {
              FARPROC funcAddress = GetProcAddress(sharedLibHandle,funcname);
              if(funcAddress == nullptr){
                 throw std::runtime_error("sharedlib.hpp : Line 63,couldn't find exported function.");
              }
-             return reinterpret_cast<TSignature*>(funcAddress);
+             return reinterpret_cast<TSignature>(funcAddress);
           }
    }
    

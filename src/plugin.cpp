@@ -28,7 +28,7 @@ namespace Tryx {
   Plugin::Plugin(SharedLib::Handle& handle,std::string& filename) {
     try {
       Plugin_TextFunc text_func;
-      setFileName(filename.c_str);
+      setFileName(filename.c_str());
       
       funcHandle = getNewPlugin(handle,"makePlugin",filename);
       if(funcHandle != nullptr) { 
@@ -61,68 +61,67 @@ namespace Tryx {
   
   void Plugin :: clearMembers()
   {
-   delete[] pluginName;
-   delete[] pluginType;
-   delete[] filename;
-   delete[] pluginVersion;
+    delete[] pluginName;
+    delete[] pluginType;
+    delete[] filename;
+    delete[] pluginVersion;
     
-   pluginType=nullptr;
-   pluginName=nullptr;
-   filename=nullptr;
-   pluginVersion=nullptr;
+    pluginType=nullptr;
+    pluginName=nullptr;
+    filename=nullptr;
+    pluginVersion=nullptr;
   } 
   
   Plugin :: ~Plugin() {
-      clearMembers();
-    }
+    clearMembers();
   }
   
-  Plugin_TextFunc* Plugin :: getTextData(SharedLib::Handle handle,
+  Plugin::Plugin_TextFunc Plugin :: getTextData(SharedLib::Handle handle,
                                          const char* funcname,
                                          std::string& filename)
   {
-   Plugin_TextFunc textHandle;
-   if(!handle) handle = SharedLib::Load(filename);     
+    Plugin_TextFunc textHandle;
+    if(!handle) handle = SharedLib::Load(filename);     
       if(handle != nullptr){
-         textHandle = SharedLib::GetFunctionPointer
-                      <Plugin_TextFunc>(handle,funcname);
-         if(funcHandle != nullptr) return textHandle();             
+        textHandle = SharedLib::GetFunctionPointer
+                     <Plugin::Plugin_TextFunc>(handle,funcname);
+        if(funcHandle != nullptr) return textHandle();             
       }
-   return nullptr;
+    return nullptr;
   } 
   
   PluginInterface* Plugin :: getNewPlugin(SharedLib::Handle handle,
                                           const char* funcname,
                                           std::string& filename)
   {
-   PluginFactoryFunc funcHandle; 
-   if(!handle) handle = SharedLib::Load(filename);     
+    PluginFactoryFunc funcHandle; 
+    if(!handle) handle = SharedLib::Load(filename);     
       if(handle != nullptr){
-         funcHandle = SharedLib::GetFunctionPointer
-                      <PluginFactoryFunc>(handle,funcname);
-         if(funcHandle != nullptr) return funcHandle();             
+        funcHandle = SharedLib::GetFunctionPointer
+                     <Plugin::PluginFactoryFunc>(handle,funcname);
+          if(funcHandle != nullptr) return funcHandle();             
       }
-   return nullptr;
+    return nullptr;
   } 
   
-  void Plugin :: setName(char * nm)
+  void Plugin :: setName(char* nm)
   {
-   pluginName=new char[strlen(nm)+1];
-   strcpy(pluginName,nm);
+    pluginName = new char[strlen(nm)+1];
+    strcpy(pluginName,nm);
   }
   
-  void Plugin :: setType(char * nm)
+  void Plugin :: setType(char* nm)
   {
-   pluginType=new char[strlen(nm)+1];
-   strcpy(pluginType,nm);
+    pluginType = new char[strlen(nm)+1];
+    strcpy(pluginType,nm);
   }
   
-  void Plugin :: setFileName(char * nm)
+  void Plugin :: setFileName(const char* nm)
   {
-   filename=new char[strlen(nm)+1];
-   strcpy(filename,nm);
+    filename = new char[strlen(nm)+1];
+    strcpy(filename,nm);
   }
-  
+
   void Plugin :: setVers(char* v)
   {
      pluginVersion = new char[strlen(v)+1];   
