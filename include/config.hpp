@@ -22,7 +22,7 @@
 
 //Platform recognition
 
-#ifdef WIN32 || defined _WIN32 
+#if WIN32 || defined _WIN32 
    #define TRYX_WIN32 1
 #else
    #define TRYX_LINUX 1

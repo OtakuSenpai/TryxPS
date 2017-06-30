@@ -29,9 +29,9 @@ namespace Tryx {
   class Plugin {
     private:
        //Signature for the plugin's registration function
-       typedef PluginInterface* (*PluginFactoryFunc)();
+       typedef PluginInterface (*PluginFactoryFunc)();
        //Signature to query for plugin texts
-       typedef char * (*Plugin_TextFunc)();
+       typedef char (*Plugin_TextFunc)();
        
        char* pluginName;
        char* pluginType;
@@ -64,21 +64,21 @@ namespace Tryx {
        // Gets a text function handle from the dynamic library and 
        // returns it. If found then returns it,else returns nullptr.
        TRYX_API_EXP Plugin::Plugin_TextFunc getTextData(SharedLib::Handle handle,
-                                         const char* funcname,
-                                         std::string& filename);
+                                                        const char* funcname,
+                                                        std::string& filename);
        
        // Gets a PluginInterface object from the dynamic library.
        // If found,then returns it,else returns nullptr.
-       TRYX_API_EXP PluginInterface* getNewPlugin(SharedLib::Handle handle,
-                                          const char* funcname,
-                                          std::string& filename);
+       TRYX_API_EXP Plugin::PluginFactoryFunc getNewPlugin(SharedLib::Handle handle,
+                                                           const char* funcname,
+                                                           std::string& filename);
                                           
        TRYX_API_EXP char* getName() const { return pluginName; } // Get name.
        TRYX_API_EXP char* getType() const { return pluginType; } // Get type.
        TRYX_API_EXP char* getVers() const { return pluginVersion; } // Get version.
        TRYX_API_EXP char* getFilename() const { return filename; } // Get filename. 
        TRYX_API_EXP PluginFactoryFunc getFuncHandle() const { // Get the function handle
-         return reinterpret_cast<PluginInterface*>(funcHandle());
+         return funcHandle;
        }
        
        TRYX_API_EXP void setName(char* name); // Set name.

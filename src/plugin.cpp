@@ -90,7 +90,7 @@ namespace Tryx {
     return nullptr;
   } 
   
-  PluginInterface* Plugin :: getNewPlugin(SharedLib::Handle handle,
+  Plugin::PluginFactoryFunc Plugin :: getNewPlugin(SharedLib::Handle handle,
                                           const char* funcname,
                                           std::string& filename)
   {
