@@ -29,9 +29,9 @@ namespace Tryx {
   class Plugin {
     private:
        //Signature for the plugin's registration function
-       typedef PluginInterface (*PluginFactoryFunc)();
+       typedef PluginInterface* (*PluginFactoryFunc)();
        //Signature to query for plugin texts
-       typedef char (*Plugin_TextFunc)();
+       typedef char* (*Plugin_TextFunc)();
        
        char* pluginName;
        char* pluginType;

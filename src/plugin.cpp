@@ -85,7 +85,7 @@ namespace Tryx {
       if(handle != nullptr){
         textHandle = SharedLib::GetFunctionPointer
                      <Plugin::Plugin_TextFunc>(handle,funcname);
-        if(funcHandle != nullptr) return textHandle();             
+        if(funcHandle != nullptr) return textHandle;             
       }
     return nullptr;
   } 
@@ -99,7 +99,7 @@ namespace Tryx {
       if(handle != nullptr){
         funcHandle = SharedLib::GetFunctionPointer
                      <Plugin::PluginFactoryFunc>(handle,funcname);
-          if(funcHandle != nullptr) return funcHandle();             
+          if(funcHandle != nullptr) return funcHandle;             
       }
     return nullptr;
   } 
