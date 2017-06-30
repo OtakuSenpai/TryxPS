@@ -125,7 +125,7 @@ class SharedLib{
       }
       
       template<typename TSignature>
-      static TRYX_API_EXP TSignature GetFunctionPointer(Handle sharedLibHandle,
+      TRYX_API_EXP static TSignature GetFunctionPointer(Handle sharedLibHandle,
                         const char* funcname){
          dlerror();
          void* funcAddress = dlsym(sharedLibHandle,funcname);

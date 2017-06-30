@@ -17,7 +17,6 @@
 #ifndef KERNEL_HPP
 #define KERNEL_HPP
 
-#include "config.hpp"
 #include "plugin.hpp"
 #include "tryxlist.hpp"
 #include <string>
