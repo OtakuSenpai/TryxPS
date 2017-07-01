@@ -17,6 +17,7 @@
 #ifndef TRYX_LINKEDLIST_HPP
 #define TRYX_LINKEDLIST_HPP
 
+#include <iostream>
 #include <stdexcept>
 
 namespace Tryx {
@@ -128,7 +129,6 @@ namespace Tryx {
             prev = current;
             current = current->next;
           }
-          std::cout<<"Prev: "<<prev->_data<<std::endl;
           prev->next = nullptr;
           delete current;
         }
@@ -210,6 +210,6 @@ namespace Tryx {
       Node* root;
   };
 
-};
+}
 
 #endif

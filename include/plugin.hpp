@@ -27,23 +27,13 @@ namespace Tryx {
 
   // Representation of a plugin
   class Plugin {
-    private:
+    public: 
+       
        //Signature for the plugin's registration function
        typedef PluginInterface* (*PluginFactoryFunc)();
        //Signature to query for plugin texts
        typedef char* (*Plugin_TextFunc)();
        
-       char* pluginName;
-       char* pluginType;
-       char* pluginVersion;
-       char* filename;
-       PluginFactoryFunc funcHandle;
-       
-       // Handy function to clear the data members of a plugin object.
-       // Used in the dtor only.
-       void clearMembers();
-       
-    public: 
        // Parameterized ctor to load a plugin dll and initiate it inside
        // the class object.Used as the primary way of loading plugins
        // Parameters are:-
@@ -88,6 +78,19 @@ namespace Tryx {
          
        //Creates a copy of the plugin instance.
        TRYX_API_EXP Plugin &operator =(const Plugin &other);
+       
+    private:
+       
+       char* pluginName;
+       char* pluginType;
+       char* pluginVersion;
+       char* filename;
+       PluginFactoryFunc funcHandle;
+       
+       // Handy function to clear the data members of a plugin object.
+       // Used in the dtor only.
+       void clearMembers();
+       
      
   };
  

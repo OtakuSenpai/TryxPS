@@ -1,4 +1,4 @@
-#!/usr/bin/sh
+#!/usr/bin/env sh
 
 echo "Compiling the plugin.cpp file..."
 

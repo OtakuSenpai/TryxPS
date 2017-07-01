@@ -14,6 +14,11 @@
 // all copies or substantial portions of the Software.                           // 
 ///////////////////////////////////////////////////////////////////////////////////
 
+#define TRYX_SOURCE 1
+
+#include "kernel.hpp"
+#include <cstring> 
+
 #ifdef TRYX_LINUX
 #include <sys/types.h>
 #include <dirent.h>
@@ -26,9 +31,6 @@
 #else
 #error Shared library system supported for Windows and Linux only!!!
 #endif
-
-#include "kernel.hpp"
-#include <cstring> 
 
 void Tryx::Kernel::loadPlugins(const std::string& path,bool addIt) {
   #ifdef TRYX_WIN32
@@ -90,13 +92,13 @@ void Tryx::Kernel::loadPlugins(const std::string& path,bool addIt) {
     while ((dirp = readdir(dp)) != nullptr) {
       try {
         filepath = path + "/" + dirp->d_name;     
-        if(stat( filepath.c_str(), &sb ) && (S_ISDIR( sb.st_mode )) continue;              
+        if(stat( filepath.c_str(), &sb ) && (S_ISDIR( sb.st_mode ))) continue;              
         else if(stat(path.c_str(), &sb) == 0 && S_ISREG(sb.st_mode))
         { 
-          dllHandle = SharedLib::Load(dirp->d_name); 
-          curPlugin = new Plugin(static_cast<SharedLib::Handle>
+          dllHandle = SharedLib::Load(dirp->d_name);
+          curPlugin = new Plugin(static_cast<SharedLib::Handle&>
                               (dllHandle),std::string(dirp->d_name));
-          loadedPlugins.pushBack(std::string(curPlugin.getName()),curPlugin);
+          loadedPlugins.pushBack(std::string(curPlugin->getName()),curPlugin);
           delete curPlugin; curPlugin = nullptr;
         }
         SharedLib::Unload(dllHandle);
@@ -113,10 +115,10 @@ void Tryx::Kernel::loadPlugins(const std::string& path,bool addIt) {
 }    
 
 void Tryx::Kernel::unloadPlugins() {
-  loadPlugins.deleteList();
+  loadedPlugins.deleteList();
 }  
 
-Plugin::PluginFactoryFunc Tryx::Kernal::retFuncHandle(std::string& iden) {
+Tryx::Plugin::PluginFactoryFunc Tryx::Kernal::retFuncHandle(std::string& iden) {
   return loadedPlugins.retDataAtPos(iden).getFuncHandle();
 }
     
