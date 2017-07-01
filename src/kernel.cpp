@@ -96,10 +96,10 @@ void Tryx::Kernel::loadPlugins(const std::string& path,bool addIt) {
         else if(stat(path.c_str(), &sb) == 0 && S_ISREG(sb.st_mode))
         { 
           dllHandle = SharedLib::Load(dirp->d_name);
+          std::string temp(dirp->d_name);
           curPlugin = new Plugin(static_cast<SharedLib::Handle&>
-                              (dllHandle),std::string(dirp->d_name));
+                              (dllHandle),temp);
           loadedPlugins.pushBack(std::string(curPlugin->getName()),curPlugin);
-          delete curPlugin; curPlugin = nullptr;
         }
         SharedLib::Unload(dllHandle);
       } 
@@ -118,7 +118,7 @@ void Tryx::Kernel::unloadPlugins() {
   loadedPlugins.deleteList();
 }  
 
-Tryx::Plugin::PluginFactoryFunc Tryx::Kernal::retFuncHandle(std::string& iden) {
-  return loadedPlugins.retDataAtPos(iden).getFuncHandle();
+Tryx::Plugin::PluginFactoryFunc Tryx::Kernel::retFuncHandle(std::string& iden) {
+  return loadedPlugins.retDataAtPos(iden)->getFuncHandle();
 }
     

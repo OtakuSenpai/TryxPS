@@ -31,7 +31,7 @@ namespace Tryx {
 
     public: 
        
-       Kernel() : loadedPlugins{}
+       Kernel() : loadedPlugins() {}
        ~Kernel() { unloadPlugins(); }
          
        // Loads all plugins present in a directory.
