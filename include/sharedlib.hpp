@@ -19,6 +19,8 @@
 
 #include "config.hpp"
 
+#define TRYX_SOURCE 1
+
 #include <string>
 #include <stdexcept>
 

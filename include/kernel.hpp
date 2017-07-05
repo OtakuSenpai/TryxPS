@@ -19,20 +19,25 @@
 
 #include "plugin.hpp"
 #include "tryxlist.hpp"
+#include "config.hpp"
 #include <string>
 
 namespace Tryx {
 
   //The engine's core
   class Kernel {
-
-    //Map of plugins by their associated file names
-    typedef TryxList<std::string,Plugin*> PluginMap;
+    private:
+    
+      //Map of plugins by their associated file names
+      typedef TryxList<std::string,Plugin*> PluginMap;
 
     public: 
        
        Kernel() : loadedPlugins() {}
        ~Kernel() { unloadPlugins(); }
+       Kernel(const std::string& path,bool& doIt) : loadedPlugins() { loadPlugins(path,doIt); }
+       
+       void loadPlugin(const std::string& path);
          
        // Loads all plugins present in a directory.
        void loadPlugins(const std::string& path,bool addIt);
@@ -40,7 +45,9 @@ namespace Tryx {
        // Unloads all plugins 
        void unloadPlugins();
        
-       Plugin::PluginFactoryFunc retFuncHandle(std::string& identifier);
+       //Helper functions
+       PluginInterface* retFuncHandle(const std::string& identifier);
+       char* getPluginName(const int& index);
        
     private:
        //All plugins currently loaded

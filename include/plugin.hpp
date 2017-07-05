@@ -14,9 +14,10 @@
 // all copies or substantial portions of the Software.                           // 
 ///////////////////////////////////////////////////////////////////////////////////
 
-
 #ifndef PLUGIN_HPP
 #define PLUGIN_HPP
+
+#define TRYX_SOURCE 1
 
 #include "config.hpp"
 #include "sharedlib.hpp"

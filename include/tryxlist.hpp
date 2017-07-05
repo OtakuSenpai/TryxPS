@@ -48,18 +48,38 @@ namespace Tryx {
         return count;
       }
       
-      int search(T searchItem) {
-        if(root != nullptr) {
+      U at(int pos) {
+        U retValue;
+        if(root == nullptr)
+          throw std::runtime_error("tryxlist.hpp : line 50, searching on an empty list.\n");
+        else {
           Node* current = root;
-          int pos = 0;
+          int temp = 0;
           while(current != nullptr) {
-            if(current->_name == searchItem) 
-              return pos;
+            if(temp == pos) {
+              retValue = current->_data;
+              break;
+            } 
+            ++temp;
+            current = current->next;
+          }
+        }
+        return retValue;
+      }
+    
+      int search(T searchItem) {
+        int pos = 0;
+        if(root == nullptr) 
+          throw std::runtime_error("tryxlist.hpp : line 50, searching on an empty list.\n");
+        else {
+          Node* current = root;
+          while(current != nullptr) {
+            if(current->_name == searchItem) break;
             ++pos;
             current = current->next;
           }
         }
-        else throw std::runtime_error("tryxlist.hpp : line 50, searching on an empty list.\n");
+        return pos;  
       }
       
       U retDataAtPos(T identifier) {
