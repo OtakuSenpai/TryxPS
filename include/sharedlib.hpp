@@ -86,7 +86,7 @@ namespace Tryx{
              }
              return reinterpret_cast<TSignature>(funcAddress);
           }
-   }
+   };
    
    #endif
    

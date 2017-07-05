@@ -60,7 +60,7 @@ void Tryx::Kernel::loadPlugins(const std::string& path,bool addIt) {
           {
             curPlugin = new Plugin(static_cast<SharedLib::Handle>
                                 (dllHandle),std::string(fd.cFileName));
-            loadedPlugins.pushBack(std::string(curPlugin.getName()),curPlugin);
+            loadedPlugins.pushBack(std::string(curPlugin->getName()),curPlugin);
             delete curPlugin; curPlugin = nullptr;
           }
           FreeLibrary(dllHandle);
@@ -100,6 +100,7 @@ void Tryx::Kernel::loadPlugins(const std::string& path,bool addIt) {
           curPlugin = new Plugin(static_cast<SharedLib::Handle&>
                               (dllHandle),temp);
           loadedPlugins.pushBack(std::string(curPlugin->getName()),curPlugin);
+          delete curPlugin; curPlugin = nullptr;
         }
         SharedLib::Unload(dllHandle);
       } 

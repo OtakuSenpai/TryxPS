@@ -1,4 +1,4 @@
-#include "plugininterface.hpp"
+#include "config.hpp"
 #include <iostream>
 
 using namespace Tryx;

@@ -16,7 +16,6 @@
 
 #include "plugininterface.hpp"
 
-#pragma once
 #ifndef CONFIG_HPP
 #define CONFIG_HPP
 
@@ -71,7 +70,7 @@
       #if defined TRYX_SOURCE
          #define TRYX_API_EXP __attribute__((visibility("default")))
          #define TRYX_DECL_PLUGIN(x) extern "C"{__declspec(dllexport) \
-            Tryx::PluginInterface * makePlugin(){ return new Tryx::PluginInterface; }}
+            Tryx::PluginInterface * makePlugin(){ return new x; }}
          #define SET_PLUGIN_VERS(x) extern "C"{__attribute__ ((dllexport)) \
              const char * getPluginVers(){ return x;}}
          #define SET_PLUGIN_NAME(x) extern "C"{__attribute__ ((dllexport)) \

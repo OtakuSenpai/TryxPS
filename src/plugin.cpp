@@ -20,6 +20,7 @@
 
 #include <stdexcept>
 #include <cstring>
+#include <iostream>
 
 using namespace std;
 
@@ -47,7 +48,7 @@ namespace Tryx {
       }
     }
     catch(std::exception& e) {
-      throw;
+      std::cout<<"Caught exception: \n"<<e.what()<<std::endl;
     }
   }
   
