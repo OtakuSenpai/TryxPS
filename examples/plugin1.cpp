@@ -1,8 +1,6 @@
 #include "plugin1.hpp"
 #include <cstring>
 
-#define TRYX_SOURCE 1
-
 TRYX_DECL_PLUGIN(Plugin1)
 SET_PLUGIN_NAME("Plugin1")
 SET_PLUGIN_TYPE("examples")
