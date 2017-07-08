@@ -8,7 +8,7 @@ using namespace Tryx;
 class Plugin1 : public PluginInterface
 {
   public:
-    Plugin1();
-    virtual ~Plugin1();
-    char* onCommand(const char* data);
+    TRYX_API_EXP Plugin1();
+    TRYX_API_EXP virtual ~Plugin1();
+    TRYX_API_EXP char* onCommand(const char* data);
 };
