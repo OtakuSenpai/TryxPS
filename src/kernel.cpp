@@ -112,6 +112,7 @@ void Tryx::Kernel::loadPlugins(const std::string& path,bool addIt) {
           loadedPlugins.pushBack(temp,curPlugin);
           delete curPlugin; curPlugin = nullptr;                  
         }
+        filepath.clear();
         SharedLib::Unload(dllHandle);
       } 
       catch(std::exception& e)
