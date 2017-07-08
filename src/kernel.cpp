@@ -83,34 +83,41 @@ void Tryx::Kernel::loadPlugins(const std::string& path,bool addIt) {
     struct stat sb;
     struct dirent *dirp;
      
-    if((dp  = opendir(path.c_str())) == nullptr) {
-      throw std::runtime_error("kernel.cpp : Line 79,error in the operation.");
+    try {   
+      if((dp  = opendir(path.c_str())) == nullptr) {
+        throw std::runtime_error("kernel.cpp : Line 79,error in the operation.");
+      }
     }
-    std::string filepath;
+    catch(std::exception& e) {
+      std::cout<<"Caught exception: "<<e.what(); 
+    }
+    
+    std::string filepath,temp;
     Plugin* curPlugin;
     SharedLib::Handle dllHandle; 
-    while ((dirp = readdir(dp)) != nullptr) {
+    while((dirp = readdir(dp)) != nullptr) {
       try {
-        filepath = path + "/" + dirp->d_name;     
+        if(strcmp(dirp->d_name,".") == 0 || strcmp(dirp->d_name,"..") == 0) continue;
+        else { 
+          temp = dirp->d_name;
+          std::cout<<"Contents: "<<dirp->d_name<<std::endl;
+          filepath = path + std::string("/") + temp;
+        }     
         if(stat( filepath.c_str(), &sb ) && (S_ISDIR( sb.st_mode ))) continue;              
-        else if(stat(path.c_str(), &sb) == 0 && S_ISREG(sb.st_mode))
+        else if(stat(filepath.c_str(), &sb) == 0 && S_ISREG(sb.st_mode))
         { 
           dllHandle = SharedLib::Load(dirp->d_name);
-          std::string temp(dirp->d_name);
           curPlugin = new Plugin(static_cast<SharedLib::Handle&>
-                              (dllHandle),temp);
-          loadedPlugins.pushBack(std::string(curPlugin->getName()),curPlugin);
-          delete curPlugin; curPlugin = nullptr;
+                            (dllHandle),temp);
         }
         SharedLib::Unload(dllHandle);
       } 
-      catch(...)
+      catch(std::exception& e)
       {
         if (dllHandle != nullptr) SharedLib::Unload(dllHandle);
-        throw std::runtime_error("kernel.cpp : Line 77,error \
-                          in finding .dlls in the directory.");
+        std::cerr<<"Caught exception: "<<e.what();
       } 
-   }     
+    }     
    closedir(dp);
  #endif
 }    
