@@ -106,11 +106,11 @@ void Tryx::Kernel::loadPlugins(const std::string& path,bool addIt) {
         if(stat( filepath.c_str(), &sb ) && (S_ISDIR( sb.st_mode ))) continue;              
         else if(stat(filepath.c_str(), &sb) == 0 && S_ISREG(sb.st_mode))
         { 
-          dllHandle = SharedLib::Load(dirp->d_name);
+          dllHandle = SharedLib::Load(filepath);
           curPlugin = new Plugin(static_cast<SharedLib::Handle&>
                             (dllHandle),temp);
           loadedPlugins.pushBack(temp,curPlugin);
-          delete curPLugin; curPlugin = nullptr;                  
+          delete curPlugin; curPlugin = nullptr;                  
         }
         SharedLib::Unload(dllHandle);
       } 

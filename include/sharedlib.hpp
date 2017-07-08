@@ -99,18 +99,16 @@ class SharedLib{
       typedef void* Handle;
       
       TRYX_API_EXP static Handle Load(const std::string& path){
-         std::string pathWithExtension = std::string("./lib") + path + std::string(".so");
-         void* sharedObject = dlopen(pathWithExtension.c_str(),RTLD_NOW);
+         void* sharedObject = dlopen(path.c_str(),RTLD_NOW);
          if(sharedObject == nullptr){
             throw std::runtime_error(
-               std::string("sharedlib.hpp : Line 82,couldn't load '") + pathWithExtension + "'");
+               std::string("sharedlib.hpp : Line 82,couldn't load '") + path + "'");
          }
          return sharedObject;
       }
       
       TRYX_API_EXP static Handle Load(const char* path){
           std::string temp; temp.assign(path);
-          temp = std::string("./lib") + temp + std::string(".so");
           void* sharedObject = dlopen(temp.c_str(),RTLD_NOW);
          if(sharedObject == nullptr){
             std::string s = "sharedlib.hpp : Line 93,couldn't load '" + temp + "'";
