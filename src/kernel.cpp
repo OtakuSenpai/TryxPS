@@ -109,6 +109,8 @@ void Tryx::Kernel::loadPlugins(const std::string& path,bool addIt) {
           dllHandle = SharedLib::Load(dirp->d_name);
           curPlugin = new Plugin(static_cast<SharedLib::Handle&>
                             (dllHandle),temp);
+          loadedPlugins.pushBack(temp,curPlugin);
+          delete curPLugin; curPlugin = nullptr;                  
         }
         SharedLib::Unload(dllHandle);
       } 
