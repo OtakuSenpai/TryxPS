@@ -32,117 +32,143 @@
 #error Shared library system supported for Windows and Linux only!!!
 #endif
 
-void Tryx::Kernel::loadPlugins(const std::string& path,bool addIt) {
-  #ifdef TRYX_WIN32
-    if(!addIt)
-      return;
-    WIN32_FIND_DATA fd;
-    char fname[256];
-    strcpy(fname,const_cast<char*>(path.c_str()));
-    size_t len=strlen(fname);
-    if(fname[len-1]=='/' || fname[len-1]=='\\')  strcat(fname,"*.dll");
-    else strcat(fname,"\\*.dll");
-    HANDLE hFind = FindFirstFile(fname, &fd); 
-    if (hFind == INVALID_HANDLE_VALUE) 
-    {
-      FindClose(hFind); return;
-    } 
-    Plugin* curPlugin;
-    HINSTANCE dllHandle = nullptr;  
-    do 
-    { 
-      try
+namespace Tryx {
+  
+  void Kernel :: loadPlugins(const std::string& path,bool addIt) {
+    #ifdef TRYX_WIN32
+      if(!addIt)
+        return;
+      WIN32_FIND_DATA fd;
+      char fname[256];
+      strcpy(fname,const_cast<char*>(path.c_str()));
+      size_t len=strlen(fname);
+      if(fname[len-1]=='/' || fname[len-1]=='\\')  strcat(fname,"*.dll");
+      else strcat(fname,"\\*.dll");
+      HANDLE hFind = FindFirstFile(fname, &fd); 
+      if (hFind == INVALID_HANDLE_VALUE) 
       {
-        if (!(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
-        {                                       
-          dllHandle = SharedLib::Load(fd.cFileName);
-          if (dllHandle != nullptr) 
-          {
-            curPlugin = new Plugin(static_cast<SharedLib::Handle>
-                                (dllHandle),std::string(fd.cFileName));
-            loadedPlugins.pushBack(std::string(curPlugin->getName()),curPlugin);
-            delete curPlugin; curPlugin = nullptr;
+        FindClose(hFind); return;
+      } 
+      Plugin* curPlugin;
+      HINSTANCE dllHandle = nullptr;  
+      do 
+      { 
+        try
+        {
+          if (!(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
+          {                                       
+            dllHandle = SharedLib::Load(fd.cFileName);
+            if (dllHandle != nullptr) 
+            {
+              curPlugin = new Plugin(static_cast<SharedLib::Handle>
+                                    (dllHandle),std::string(fd.cFileName));
+              loadedPlugins.pushBack(std::string(curPlugin->getName()),curPlugin);
+              delete curPlugin; curPlugin = nullptr;
+            }
+            FreeLibrary(dllHandle);
           }
-          FreeLibrary(dllHandle);
+        }
+        catch(...)
+        {
+          if (dllHandle != NULL) FreeLibrary(dllHandle);
+          throw std::runtime_error("kernel.cpp : Line 34, \
+                 error in finding .dlls in the directory.");
+        }
+      } while (FindNextFile(hFind, &fd));
+      FindClose(hFind);
+    #endif
+   
+    #ifdef TRYX_LINUX
+      if(!addIt)
+        return;
+      DIR *dp;
+      struct stat sb;
+      struct dirent *dirp;
+     
+      try {   
+        if((dp  = opendir(path.c_str())) == nullptr) {
+          throw std::runtime_error("kernel.cpp : Line 79,error in the operation.");
         }
       }
-      catch(...)
-      {
-        if (dllHandle != NULL) FreeLibrary(dllHandle);
-        throw std::runtime_error("kernel.cpp : Line 34, \
-            error in finding .dlls in the directory.");
+      catch(std::exception& e) {
+        std::cout<<"Caught exception: "<<e.what(); 
       }
-    } while (FindNextFile(hFind, &fd));
-    FindClose(hFind);
-  #endif
-   
-  #ifdef TRYX_LINUX
-    if(!addIt)
-      return;
-    DIR *dp;
-    struct stat sb;
-    struct dirent *dirp;
-     
-    try {   
-      if((dp  = opendir(path.c_str())) == nullptr) {
-        throw std::runtime_error("kernel.cpp : Line 79,error in the operation.");
-      }
+    
+      std::string filepath,temp;
+      Plugin* curPlugin;
+      SharedLib::Handle dllHandle; 
+      while((dirp = readdir(dp)) != nullptr) {
+        try {
+          if(strcmp(dirp->d_name,".") == 0 || strcmp(dirp->d_name,"..") == 0) continue;
+          else { 
+            temp.assign(dirp->d_name);
+            std::cout<<"Contents: "<<dirp->d_name<<std::endl;
+            filepath = path + std::string("/") + temp;
+          }     
+          if(stat( filepath.c_str(), &sb ) && (S_ISDIR( sb.st_mode ))) continue;              
+          else if(stat(filepath.c_str(), &sb) == 0 && S_ISREG(sb.st_mode))
+          { 
+            dllHandle = SharedLib::Load(filepath);
+            curPlugin = new Plugin(static_cast<SharedLib::Handle&>
+                                  (dllHandle),filepath);
+            loadedPlugins.pushBack(curPlugin->getName(),curPlugin);
+            delete curPlugin; curPlugin = nullptr;                  
+          }
+          filepath.clear();
+          SharedLib::Unload(dllHandle);
+        } 
+        catch(std::exception& e)
+        {
+          if (dllHandle != nullptr) SharedLib::Unload(dllHandle);
+          std::cerr<<"Caught exception: "<<e.what();
+        } 
+      }     
+      closedir(dp);
+    #endif
+  }    
+
+  void Kernel :: loadPlugin(const std::string& path) {
+    try {
+      SharedLib::Handle dllHandle;
+      Plugin* curPlugin;
+      dllHandle = SharedLib::Load(path);
+      curPlugin = new Plugin(static_cast<SharedLib::Handle&>
+                            (dllHandle),const_cast<std::string&>(path));
+      loadedPlugins.pushBack(std::string(curPlugin->getName()),curPlugin);
     }
     catch(std::exception& e) {
-      std::cout<<"Caught exception: "<<e.what(); 
+      std::cout<<"Caught exception: \n"<<e.what();
     }
+  }
+
+  void Kernel :: unloadPlugins() {
+    try {
+      loadedPlugins.deleteList();
+    }
+    catch(std::exception& e) {
+      std::cout<<"Caught exception: \n"<<e.what();
+    }
+  }  
+
+  PluginInterface* Kernel :: retFuncHandle(const std::string& iden) {
+    Plugin::PluginFactoryFunc temp;
+    try {
+      temp = loadedPlugins.retDataAtPos(iden)->getFuncHandle();
+    }
+    catch(std::exception& e) {
+      std::cout<<"Caught exception: \n"<<e.what();
+    }
+    return temp();
+  }
     
-    std::string filepath,temp;
-    Plugin* curPlugin;
-    SharedLib::Handle dllHandle; 
-    while((dirp = readdir(dp)) != nullptr) {
-      try {
-        if(strcmp(dirp->d_name,".") == 0 || strcmp(dirp->d_name,"..") == 0) continue;
-        else { 
-          temp = dirp->d_name;
-          std::cout<<"Contents: "<<dirp->d_name<<std::endl;
-          filepath = path + std::string("/") + temp;
-        }     
-        if(stat( filepath.c_str(), &sb ) && (S_ISDIR( sb.st_mode ))) continue;              
-        else if(stat(filepath.c_str(), &sb) == 0 && S_ISREG(sb.st_mode))
-        { 
-          dllHandle = SharedLib::Load(filepath);
-          curPlugin = new Plugin(static_cast<SharedLib::Handle&>
-                            (dllHandle),temp);
-          loadedPlugins.pushBack(temp,curPlugin);
-          delete curPlugin; curPlugin = nullptr;                  
-        }
-        filepath.clear();
-        SharedLib::Unload(dllHandle);
-      } 
-      catch(std::exception& e)
-      {
-        if (dllHandle != nullptr) SharedLib::Unload(dllHandle);
-        std::cerr<<"Caught exception: "<<e.what();
-      } 
-    }     
-   closedir(dp);
- #endif
-}    
-
-void Tryx::Kernel::loadPlugin(const std::string& path) {
-  SharedLib::Handle dllHandle;
-  Plugin* curPlugin;
-  dllHandle = SharedLib::Load(path);
-  curPlugin = new Plugin(static_cast<SharedLib::Handle&>
-                         (dllHandle),const_cast<std::string&>(path));
-  loadedPlugins.pushBack(std::string(curPlugin->getName()),curPlugin);
-}
-
-void Tryx::Kernel::unloadPlugins() {
-  loadedPlugins.deleteList();
-}  
-
-Tryx::PluginInterface* Tryx::Kernel::retFuncHandle(const std::string& iden) {
-  Plugin::PluginFactoryFunc temp = loadedPlugins.retDataAtPos(iden)->getFuncHandle();
-  return temp();
-}
-    
-char* Tryx::Kernel::getPluginName(const int& index) {
-  return loadedPlugins.at(index)->getName();
-}  
+  std::string Kernel :: getPluginName(const int& index) {
+    std::string s;
+    try {
+      s = loadedPlugins.at(index)->getName();
+    }
+    catch(std::exception& e) {
+      std::cout<<"Caught exception: \n"<<e.what();
+    }
+    return s;
+  }
+} //namespace Tryx

@@ -15,7 +15,7 @@ int main() {
     std::cin>>s; std::cout<<"\n";
     k.loadPlugins(s,true);
     std::cout<<"Size: "<<k.getSize()<<std::endl;
-    std::string temp(k.getPluginName(0));
+    std::string temp = k.getPluginName(0);
     PluginInterface *p = k.retFuncHandle(temp);
     p->onCommand("Hello world!!");
     delete p;

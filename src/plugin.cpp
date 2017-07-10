@@ -29,7 +29,7 @@ namespace Tryx {
   Plugin::Plugin(SharedLib::Handle& handle,std::string& filename) {
     try {
       Plugin_TextFunc text_func;
-      setFileName(filename.c_str());
+      setFileName(filename);
       
       funcHandle = getNewPlugin(handle,"makePlugin",filename);
       if(funcHandle != nullptr) { 
@@ -54,27 +54,10 @@ namespace Tryx {
   
   Plugin::Plugin(const Plugin& other)
   {
-    setName(other.pluginName);
-    setType(other.pluginType);
-    setVers(other.pluginVersion);
-    setFileName(other.filename);
-  }
-  
-  void Plugin :: clearMembers()
-  {
-    delete[] pluginName;
-    delete[] pluginType;
-    delete[] filename;
-    delete[] pluginVersion;
-    
-    pluginType=nullptr;
-    pluginName=nullptr;
-    filename=nullptr;
-    pluginVersion=nullptr;
-  } 
-  
-  Plugin :: ~Plugin() {
-    clearMembers();
+    pluginName = other.pluginName;
+    pluginType = other.pluginType;
+    pluginVersion = other.pluginVersion;
+    filename = other.filename;
   }
   
   Plugin::Plugin_TextFunc Plugin :: getTextData(SharedLib::Handle handle,
@@ -105,27 +88,35 @@ namespace Tryx {
     return nullptr;
   } 
   
-  void Plugin :: setName(char* nm)
-  {
-    pluginName = new char[strlen(nm)+1];
-    strcpy(pluginName,nm);
+  void Plugin :: setName(const char* name) {
+    pluginName.assign(name);
   }
   
-  void Plugin :: setType(char* nm)
-  {
-    pluginType = new char[strlen(nm)+1];
-    strcpy(pluginType,nm);
+  void Plugin :: setName(const std::string& name) {
+    pluginName = name;
   }
   
-  void Plugin :: setFileName(const char* nm)
-  {
-    filename = new char[strlen(nm)+1];
-    strcpy(filename,nm);
+  void Plugin :: setType(const char* type) {
+    pluginType.assign(type);
+  }
+  
+  void Plugin :: setType(const std::string& type) {
+    pluginType = type;
+  }
+  
+  void Plugin :: setFileName(const char* fname) {
+    filename.assign(fname);
+  }
+  
+  void Plugin :: setFileName(const std::string& fname) {
+    filename = fname; 
   }
 
-  void Plugin :: setVers(char* v)
-  {
-     pluginVersion = new char[strlen(v)+1];   
-     strcpy(pluginVersion,v);
+  void Plugin :: setVers(const char* vers) {
+     pluginVersion.assign(vers);
+  }
+  
+  void Plugin :: setVers(const std::string& vers) {
+    pluginVersion = vers;
   }
 } // namespace Tryx

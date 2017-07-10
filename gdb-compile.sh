@@ -8,9 +8,9 @@ g++  -fPIC -g3 -c -std=c++14 -fmessage-length=30 -fdiagnostics-color=always -Wal
 
 echo "Compiling the examples..."
 
-g++ -fPIC -g -c -std=c++14 -fmessage-length=30 -fdiagnostics-color=always -Wall -Wextra -pedantic -lstdc++ ./examples/plugin1.cpp -I ./include -I ./examples
+g++ -fPIC -g3 -c -std=c++14 -fmessage-length=30 -fdiagnostics-color=always -Wall -Wextra -pedantic -lstdc++ ./examples/plugin1.cpp -I ./include -I ./examples
 
-g++ -g -shared -Wl,-soname,libplugin1.so.1 -o libplugin.so.0.1 ./plugin1.o -lstdc++
+g++ -g3 -shared -Wl,-soname,libplugin1.so.1 -o libplugin.so.0.1 ./plugin1.o -lstdc++
 
 echo "Compiling main.cpp ..."      
 

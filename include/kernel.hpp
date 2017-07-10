@@ -47,7 +47,7 @@ namespace Tryx {
        
        //Helper functions
        PluginInterface* retFuncHandle(const std::string& identifier);
-       char* getPluginName(const int& index);
+       std::string getPluginName(const int& index);
        
        int getSize() { return loadedPlugins.size(); }
        
