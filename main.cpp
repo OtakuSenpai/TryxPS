@@ -16,6 +16,7 @@ int main() {
     k.loadPlugins(s,true);
     std::cout<<"Size: "<<k.getSize()<<std::endl;
     std::string temp = k.getPluginName(0);
+    std::cout<<"Name: "<<temp<<std::endl;
     PluginInterface *p = k.retFuncHandle(temp);
     p->onCommand("Hello world!!");
     delete p;

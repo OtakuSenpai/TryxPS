@@ -94,7 +94,7 @@ namespace Tryx {
         std::cout<<"Caught exception: "<<e.what(); 
       }
     
-      std::string filepath,temp;
+      std::string filepath,temp,temp2;
       Plugin* curPlugin;
       SharedLib::Handle dllHandle; 
       while((dirp = readdir(dp)) != nullptr) {
@@ -111,7 +111,8 @@ namespace Tryx {
             dllHandle = SharedLib::Load(filepath);
             curPlugin = new Plugin(static_cast<SharedLib::Handle&>
                                   (dllHandle),filepath);
-            loadedPlugins.pushBack(curPlugin->getName(),curPlugin);
+            temp2 = curPlugin->getName();
+            loadedPlugins.push_back(new Node(temp2,curPlugin));
             delete curPlugin; curPlugin = nullptr;                  
           }
           filepath.clear();
@@ -133,8 +134,9 @@ namespace Tryx {
       Plugin* curPlugin;
       dllHandle = SharedLib::Load(path);
       curPlugin = new Plugin(static_cast<SharedLib::Handle&>
-                            (dllHandle),const_cast<std::string&>(path));
-      loadedPlugins.pushBack(std::string(curPlugin->getName()),curPlugin);
+                            (dllHandle),path);
+      std::string temp = curPlugin->getName();
+      loadedPlugins.push_back(new Node(temp,curPlugin));
     }
     catch(std::exception& e) {
       std::cout<<"Caught exception: \n"<<e.what();
@@ -143,7 +145,7 @@ namespace Tryx {
 
   void Kernel :: unloadPlugins() {
     try {
-      loadedPlugins.deleteList();
+      loadedPlugins.clear();
     }
     catch(std::exception& e) {
       std::cout<<"Caught exception: \n"<<e.what();
@@ -153,7 +155,10 @@ namespace Tryx {
   PluginInterface* Kernel :: retFuncHandle(const std::string& iden) {
     Plugin::PluginFactoryFunc temp;
     try {
-      temp = loadedPlugins.retDataAtPos(iden)->getFuncHandle();
+      for(auto* i : loadedPlugins) {
+        if(i->getName() == iden) 
+          temp = i->getData()->getFuncHandle();
+      }
     }
     catch(std::exception& e) {
       std::cout<<"Caught exception: \n"<<e.what();

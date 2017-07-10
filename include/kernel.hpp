@@ -18,18 +18,50 @@
 #define KERNEL_HPP
 
 #include "plugin.hpp"
-#include "tryxlist.hpp"
 #include "config.hpp"
 #include <string>
+#include <vector>
 
 namespace Tryx {
 
   //The engine's core
   class Kernel {
     private:
-    
+      
+      class Node {
+        public:
+          Node() : _name(), _data() {}
+          Node(std::string& name,Plugin* data) : _name(name), _data(data) {}
+          Node(const Node& other) {
+            try {
+              _name = other._name;
+              _data = other._data;
+            }
+            catch(std::exception& e) {
+              std::cerr<<"Caught exception: \n"<<e.what();
+            }
+          }
+          Node& operator=(const Node& other) {
+            try {
+              _name = other._name;
+              _data = other._data;
+            }
+            catch(std::exception& e) {
+              std::cerr<<"Caught exception: \n"<<e.what(); 
+            }
+            return *this;
+          }
+          ~Node() {}
+          std::string getName() { return _name; }
+          Plugin* getData() { return _data; }    
+        
+        private:
+          std::string _name;
+          Plugin* _data;
+      };
+        
       //Map of plugins by their associated file names
-      typedef TryxList<std::string,Plugin*> PluginMap;
+      std::vector<Kernel::Node*> loadedPlugins;
 
     public: 
        
@@ -50,10 +82,6 @@ namespace Tryx {
        std::string getPluginName(const int& index);
        
        int getSize() { return loadedPlugins.size(); }
-       
-    private:
-       //All plugins currently loaded
-       PluginMap loadedPlugins;
   };
 
 } // namespace Tryx

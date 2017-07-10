@@ -26,7 +26,7 @@ using namespace std;
 
 namespace Tryx {
   
-  Plugin::Plugin(SharedLib::Handle& handle,std::string& filename) {
+  Plugin::Plugin(SharedLib::Handle& handle,const std::string& filename) {
     try {
       Plugin_TextFunc text_func;
       setFileName(filename);
@@ -62,7 +62,7 @@ namespace Tryx {
   
   Plugin::Plugin_TextFunc Plugin :: getTextData(SharedLib::Handle handle,
                                          const char* funcname,
-                                         std::string& filename)
+                                         const std::string& filename)
   {
     Plugin_TextFunc textHandle;
     if(!handle) handle = SharedLib::Load(filename);     
@@ -76,7 +76,7 @@ namespace Tryx {
   
   Plugin::PluginFactoryFunc Plugin :: getNewPlugin(SharedLib::Handle handle,
                                           const char* funcname,
-                                          std::string& filename)
+                                          const std::string& filename)
   {
     PluginFactoryFunc funcHandle; 
     if(!handle) handle = SharedLib::Load(filename);     

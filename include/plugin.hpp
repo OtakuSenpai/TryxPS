@@ -41,7 +41,7 @@ namespace Tryx {
        // SharedLib::Handle handle - A handle which is passed from the 
        // Kernal class.It helps in loading the function pointers.
        // std::string& filename - The filename to the dynamic library.
-       Plugin(SharedLib::Handle& handle,std::string &filename);
+       Plugin(SharedLib::Handle& handle,const std::string &filename);
        
        // Copy ctor for constructing a plugin from one that has already 
        // been loaded.Required to provide correct semantics for storing 
@@ -55,14 +55,14 @@ namespace Tryx {
        // Gets a text function handle from the dynamic library and 
        // returns it. If found then returns it,else returns nullptr.
        Plugin::Plugin_TextFunc getTextData(SharedLib::Handle handle,
-                                                        const char* funcname,
-                                                        std::string& filename);
+                                          const char* funcname,
+                                          const std::string& filename);
        
        // Gets a PluginInterface object from the dynamic library.
        // If found,then returns it,else returns nullptr.
        Plugin::PluginFactoryFunc getNewPlugin(SharedLib::Handle handle,
-                                                           const char* funcname,
-                                                           std::string& filename);
+                                              const char* funcname,
+                                              const std::string& filename);
                                           
        std::string getName() const { return pluginName; } // Get name.
        std::string getType() const { return pluginType; } // Get type.
