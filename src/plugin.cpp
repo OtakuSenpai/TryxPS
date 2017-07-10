@@ -54,10 +54,41 @@ namespace Tryx {
   
   Plugin::Plugin(const Plugin& other)
   {
-    pluginName = other.pluginName;
-    pluginType = other.pluginType;
-    pluginVersion = other.pluginVersion;
-    filename = other.filename;
+    try { 
+      pluginName = other.getName();
+      pluginType = other.getType();
+      pluginVersion = other.getVers();
+      filename = other.getFilename();
+    }
+    catch(std::exception& e) {
+      std::cerr<<"Caught exception: \n"<<e.what();
+    }
+  }
+  
+  Plugin::Plugin(const Plugin* other)
+  {
+    try { 
+      pluginName = other->getName();
+      pluginType = other->getType();
+      pluginVersion = other->getVers();
+      filename = other->getFilename();
+    }
+    catch(std::exception& e) {
+      std::cerr<<"Caught exception: \n"<<e.what();
+    }
+  }
+  
+  Plugin& Plugin :: operator= (const Plugin& other) {
+    try {
+      pluginName = other.pluginName;
+      pluginType = other.pluginType;
+      pluginVersion = other.pluginVersion;
+      filename = other.filename;
+    }
+    catch(std::exception& e) {
+      std::cerr<<"Caught exception: \n"<<e.what();
+    }
+    return *this;
   }
   
   Plugin::Plugin_TextFunc Plugin :: getTextData(SharedLib::Handle handle,

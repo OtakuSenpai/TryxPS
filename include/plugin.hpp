@@ -23,6 +23,7 @@
 #include "sharedlib.hpp"
 
 #include <string>
+#include <functional>
 
 namespace Tryx {
 
@@ -32,6 +33,7 @@ namespace Tryx {
        
        //Signature for the plugin's registration function
        typedef PluginInterface* (*PluginFactoryFunc)();
+       //auto PluginFactoryFunc = std::mem_fn(&PluginInterface::onCommand);
        //Signature to query for plugin texts
        typedef const char* (*Plugin_TextFunc)();
        
@@ -47,6 +49,7 @@ namespace Tryx {
        // been loaded.Required to provide correct semantics for storing 
        // plugins in an STL map container.
        Plugin(const Plugin &other);
+       Plugin(const Plugin* other);
        
        // Unloads the plugin, unloading its library when no more 
        // references to it exist.
@@ -82,7 +85,7 @@ namespace Tryx {
        void setFileName(const std::string& fname);
          
        //Creates a copy of the plugin instance.
-       TRYX_API_EXP Plugin &operator =(const Plugin &other);
+       Plugin &operator =(const Plugin &other);
        
     private:
        

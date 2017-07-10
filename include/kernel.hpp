@@ -21,6 +21,8 @@
 #include "config.hpp"
 #include <string>
 #include <vector>
+#include <memory>
+#include <algorithm>
 
 namespace Tryx {
 
@@ -31,11 +33,11 @@ namespace Tryx {
       class Node {
         public:
           Node() : _name(), _data() {}
-          Node(std::string& name,Plugin* data) : _name(name), _data(data) {}
+          Node(std::string& name,Plugin* data) : _name(name), _data(new Plugin(data)) {}
           Node(const Node& other) {
             try {
-              _name = other._name;
-              _data = other._data;
+              _name = other.getName();
+              _data = other.getData();
             }
             catch(std::exception& e) {
               std::cerr<<"Caught exception: \n"<<e.what();
@@ -43,8 +45,8 @@ namespace Tryx {
           }
           Node& operator=(const Node& other) {
             try {
-              _name = other._name;
-              _data = other._data;
+              _name = other.getName();
+              _data = other.getData();
             }
             catch(std::exception& e) {
               std::cerr<<"Caught exception: \n"<<e.what(); 
@@ -52,12 +54,12 @@ namespace Tryx {
             return *this;
           }
           ~Node() {}
-          std::string getName() { return _name; }
-          Plugin* getData() { return _data; }    
+          std::string getName() const{ return _name; }
+          std::shared_ptr<Plugin> getData() const{ return _data; }    
         
         private:
           std::string _name;
-          Plugin* _data;
+          std::shared_ptr<Plugin> _data;
       };
         
       //Map of plugins by their associated file names
