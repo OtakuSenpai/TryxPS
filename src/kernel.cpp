@@ -153,19 +153,21 @@ namespace Tryx {
   }  
 
   PluginInterface* Kernel :: retFuncHandle(const std::string& iden) {
-    PluginInterface* temp2;
+    PluginInterface* p_plugin;
     try {
       for(auto* i : loadedPlugins) {
         if(i->getName() == iden) {
           Plugin::PluginFactoryFunc temp = i->getData().get()->getFuncHandle();
-          temp2 = temp();
+          p_plugin = temp();
         }
       }
     }
     catch(std::exception& e) {
       std::cout<<"Caught exception: \n"<<e.what();
     }
-    return temp2;
+    if(p_plugin != nullptr)
+      return p_plugin;
+    else return nullptr;
   }
     
   std::string Kernel :: getPluginName(const int& index) {
