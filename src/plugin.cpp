@@ -59,6 +59,7 @@ namespace Tryx {
       pluginType = other.getType();
       pluginVersion = other.getVers();
       filename = other.getFilename();
+      funcHandle = other.getFuncHandle();
     }
     catch(std::exception& e) {
       std::cerr<<"Caught exception: \n"<<e.what();
@@ -72,6 +73,7 @@ namespace Tryx {
       pluginType = other->getType();
       pluginVersion = other->getVers();
       filename = other->getFilename();
+      funcHandle = other->getFuncHandle();
     }
     catch(std::exception& e) {
       std::cerr<<"Caught exception: \n"<<e.what();
@@ -84,6 +86,7 @@ namespace Tryx {
       pluginType = other.pluginType;
       pluginVersion = other.pluginVersion;
       filename = other.filename;
+      funcHandle = other.getFuncHandle();
     }
     catch(std::exception& e) {
       std::cerr<<"Caught exception: \n"<<e.what();

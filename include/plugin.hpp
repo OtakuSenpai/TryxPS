@@ -33,7 +33,6 @@ namespace Tryx {
        
        //Signature for the plugin's registration function
        typedef PluginInterface* (*PluginFactoryFunc)();
-       //auto PluginFactoryFunc = std::mem_fn(&PluginInterface::onCommand);
        //Signature to query for plugin texts
        typedef const char* (*Plugin_TextFunc)();
        
