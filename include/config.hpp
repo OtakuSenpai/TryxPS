@@ -14,15 +14,14 @@
 // all copies or substantial portions of the Software.                           // 
 ///////////////////////////////////////////////////////////////////////////////////
 
-#include "plugininterface.hpp"
-
-#pragma once
 #ifndef CONFIG_HPP
 #define CONFIG_HPP
 
+#include "plugininterface.hpp"
+
 //Platform recognition
 
-#ifdef WIN32 || defined _WIN32 
+#if defined WIN32 || defined _WIN32 
    #define TRYX_WIN32 1
 #else
    #define TRYX_LINUX 1
@@ -38,9 +37,9 @@
 //the library or not. Otherwise, it checks whether to import or
 //export functions for usage.
 
-#ifdef _MSC_VER
+#if defined _WIN32 
    #ifdef TRYX_STATICLIB
-      #define TRYX_API_EXP
+      #define TRYX_API
    #else
       //Define this in the derived plugin 
       #ifdef TRYX_SOURCE 
@@ -48,16 +47,16 @@
          //Add this before a symbol to be exported
          #define TRYX_API_EXP __declspec(dllexport)
          //This sets the name of the new plugin dll
-         #define TRYX_DECL_PLUGIN(x) extern "C"{__declspec(dllexport) 
+         #define TRYX_DECL_PLUGIN(x) extern "C"{__declspec(dllexport) \
             PluginInterface * makePlugin(){ return new x;}}
          //Add this in the source file of the derived plugin
-         #define SET_PLUGIN_VERS(x) extern "C"{__declspec(dllexport) 
+         #define SET_PLUGIN_VERS(x) extern "C"{__declspec(dllexport) \
             const char * getPluginVers(){ return x;}}
          //Add this in the source file of the derived plugin
-         #define SET_PLUGIN_NAME(x) extern "C"{__declspec(dllexport) 
+         #define SET_PLUGIN_NAME(x) extern "C"{__declspec(dllexport) \
             const char * getPluginName(){ return x;}}
          //Add this in the source file of the derived plugin
-         #define SET_PLUGIN_TYPE(x) extern "C"{__declspec(dllexport)
+         #define SET_PLUGIN_TYPE(x) extern "C"{__declspec(dllexport) \
             const char * getPluginType(){ return x;}}   
       #else
       // If we are consuming the DLL, import the symbols tagged like this
@@ -70,13 +69,13 @@
    #else
       #if defined TRYX_SOURCE
          #define TRYX_API_EXP __attribute__((visibility("default")))
-         #define TRYX_DECL_PLUGIN(x) extern "C"{__declspec(dllexport) 
-            PluginInterface * makePlugin(){ return new x;}}
-         #define SET_PLUGIN_Vers(x) extern "C"{__attribute__ ((dllexport))
+         #define TRYX_DECL_PLUGIN(x) extern "C"{__attribute__((visibility("default"))) \
+            Tryx::PluginInterface * makePlugin(){ return new x; }}
+         #define SET_PLUGIN_VERS(x) extern "C"{__attribute__((visibility("default"))) \
              const char * getPluginVers(){ return x;}}
-         #define SET_PLUGIN_NAME(x) extern "C"{__attribute__ ((dllexport))
+         #define SET_PLUGIN_NAME(x) extern "C"{__attribute__((visibility("default"))) \
              const char * getPluginName(){ return x;}}
-         #define SET_PLUGIN_TYPE(x) extern "C"{__declspec(dllexport)
+         #define SET_PLUGIN_TYPE(x) extern "C"{__attribute__((visibility("default"))) \
             const char * getPluginType(){ return x;}}      
       #else
          #define TRYX_API_IMP __attribute__ ((visibility ("default")))

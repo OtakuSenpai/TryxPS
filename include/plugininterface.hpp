@@ -17,18 +17,25 @@
 #ifndef PLUGININTERFACE_HPP
 #define PLUGININTERFACE_HPP
 
+#if defined _WIN32
+  #define TRYX_API_EXP __declspec(dllexport)
+#elif defined __GNUC__
+  #define TRYX_API_EXP __attribute__((visibility("default")))
+#endif
+
 // This is a very basic plugin interface,made for my IRC bot.
 // If you want to make your own bot then change this class 
 // according to your needs. 
 
 namespace Tryx{
+   
    class PluginInterface 
    {
       public:
-         PluginInterface(){}
-         virtual ~PluginInterface(){}
+        TRYX_API_EXP PluginInterface() {}
+        TRYX_API_EXP virtual ~PluginInterface() {}
 
-         virtual char* onCommand(const char* data)=default;
+        TRYX_API_EXP virtual char* onCommand(const char* data)=0;
    };
 } //namespace Tryx
 

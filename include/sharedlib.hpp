@@ -19,8 +19,12 @@
 
 #include "config.hpp"
 
+#define TRYX_SOURCE 1
+
 #include <string>
 #include <stdexcept>
+#include <iostream>
+#include <cstdlib>
 
 #ifdef TRYX_WIN32
 
@@ -43,7 +47,7 @@ namespace Tryx{
       public:
           typedef HMODULE Handle;
       
-          TRYX_API static Handle Load(const std::string& path){
+          TRYX_API_EXP static Handle Load(const std::string& path){
              std::string pathWithExtension = path + std::string(".dll");
              HMODULE mHandle = LoadLibraryA(pathWithExtension.c_str());
              if(mHandle == nullptr){
@@ -52,7 +56,7 @@ namespace Tryx{
              return mHandle;
           }
           
-          TRYX_API static Handle Load(const char* path){
+          TRYX_API_EXP static Handle Load(const char* path){
            
              std::string pathWithExtension; pathWithExtension.assign(path);
              pathWithExtension = pathWithExtension + std::string(".dll");
@@ -63,7 +67,7 @@ namespace Tryx{
              return mHandle;
           }
           
-          TRYX_API static void Unload(Handle sharedLibHandle){
+          TRYX_API_EXP static void Unload(Handle sharedLibHandle){
              bool result = FreeLibrary(sharedLibHandle);
              if(result == false){
                 throw std::runtime_error("sharedlib.hpp : Line 49,couldn't unload dll.");
@@ -74,17 +78,17 @@ namespace Tryx{
           //in which the function will be looked up,plus the name of the function to
           //look up. Return type is a pointer to the specified function.
           
-          template<typename TSignature>
-          static TSignature *GetFunctionPointer(Handle sharedLibHandle,
+          TRYX_API_EXP template<typename TSignature>
+          static TSignature GetFunctionPointer(Handle sharedLibHandle,
                             const char* funcname)
           {
              FARPROC funcAddress = GetProcAddress(sharedLibHandle,funcname);
              if(funcAddress == nullptr){
                 throw std::runtime_error("sharedlib.hpp : Line 63,couldn't find exported function.");
              }
-             return reinterpret_cast<TSignature*>(funcAddress);
+             return reinterpret_cast<TSignature>(funcAddress);
           }
-   }
+   };
    
    #endif
    
@@ -96,45 +100,71 @@ class SharedLib{
    public:
       typedef void* Handle;
       
-      TRYX_API static Handle Load(const std::string& path){
-         std::string pathWithExtension = std::string("./lib") + path + std::string(".so");
-         void* sharedObject = dlopen(pathWithExtension.c_str(),RTLD_NOW);
-         if(sharedObject == nullptr){
-            throw std::runtime_error(
-               std::string("sharedlib.hpp : Line 82,couldn't load '") + pathWithExtension + "'");
-         }
-         return sharedObject;
+      TRYX_API_EXP static Handle Load(const std::string& path) {
+        void* sharedObject;
+        try {
+          sharedObject = dlopen(path.c_str(),RTLD_NOW);
+          if(sharedObject == nullptr){
+            std::string s = std::string("sharedlib.hpp : Line 82,couldn't load '") + path + "'.\nError is: " + std::string(dlerror()) +"\n";
+            throw std::runtime_error(s);
+          }
+        }
+        catch(std::exception& e) {
+          std::cerr<<"Caught exception: \n"<<e.what(); 
+          std::exit(EXIT_FAILURE);
+        }   
+        return sharedObject;
       }
       
-      TRYX_API static Handle Load(const char* path){
+      TRYX_API_EXP static Handle Load(const char* path){
+        void* sharedObject;
+        try {  
           std::string temp; temp.assign(path);
-          temp = std::string("./lib") + temp + std::string(".so");
-          void* sharedObject = dlopen(temp.c_str(),RTLD_NOW);
-         if(sharedObject == nullptr){
-            throw std::runtime_error(
-               std::string("sharedlib.hpp : Line 93,couldn't load '") + pathWithExtension + "'");
-         }
-         return sharedObject;
+          sharedObject = dlopen(temp.c_str(),RTLD_NOW);
+          if(sharedObject == nullptr){
+            std::string s = "sharedlib.hpp : Line 93,couldn't load '" + temp + "'.\nError is: " + std::string(dlerror()) + "\n";
+            throw std::runtime_error(s);
+          }
+        }
+        catch(std::exception& e) {
+          std::cerr<<"Caught exception: \n"<<e.what();
+          std::exit(EXIT_FAILURE);
+        } 
+        return sharedObject;
       } 
       
-      TRYX_API static void Unload(Handle sharedLibHandle){
-         int result = dlclose(sharedLibHandle);
-         if(result != 0){
-            throw std::runtime_error("sharedlib.hpp : Line 93,couldn't unload shared object.");
-         }
+      TRYX_API_EXP static void Unload(Handle sharedLibHandle){
+        try {   
+          int result = dlclose(sharedLibHandle);
+          if(result != 0){
+            std::string s = "sharedlib.hpp : Line 93,couldn't unload shared object.\nError is: " + std::string(dlerror()) + "\n";
+            throw std::runtime_error(s);
+          }
+        }
+        catch(std::exception& e) {
+          std::cerr<<"Caught exception: \n"<<e.what();
+          std::exit(EXIT_FAILURE);
+        }   
       }
       
       template<typename TSignature>
-      static TSignature *GetFunctionPointer(Handle sharedLibHandle,
+      TRYX_API_EXP static TSignature GetFunctionPointer(Handle sharedLibHandle,
                         const char* funcname){
-         dlerror();
-         void* funcAddress = dlsym(sharedLibHandle,funcname);
-         const char *error = dlerror();
-         if(error != nullptr){
-            throw std::runtime_error
-            ("sharedlib.hpp : Line 104,couldn't find exported function.");
-         } 
-         return reinterpret_cast<TSignature*>(funcAddress);  
+        void* funcAddress;
+        try {
+          dlerror();
+          funcAddress = dlsym(sharedLibHandle,funcname);
+          const char *error = dlerror();
+          if(error != nullptr){
+            std::string s = "sharedlib.hpp : Line 104,couldn't find exported function.\nError is: " + std::string(error)+ "\n";
+            throw std::runtime_error(s);
+          }
+        }
+        catch(std::exception& e) {
+          std::cerr<<"Caught exception: \n"<<e.what();
+          std::exit(EXIT_FAILURE);
+        }
+        return reinterpret_cast<TSignature>(funcAddress);  
       }
 };
 

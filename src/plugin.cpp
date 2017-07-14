@@ -20,15 +20,16 @@
 
 #include <stdexcept>
 #include <cstring>
+#include <iostream>
 
 using namespace std;
 
 namespace Tryx {
   
-  Plugin::Plugin(SharedLib::Handle& handle,std::string& filename) {
+  Plugin::Plugin(SharedLib::Handle& handle,const std::string& filename) {
     try {
       Plugin_TextFunc text_func;
-      setFileName(const_cast<char*>(filename.c_str));
+      setFileName(filename);
       
       funcHandle = getNewPlugin(handle,"makePlugin",filename);
       if(funcHandle != nullptr) { 
@@ -47,85 +48,109 @@ namespace Tryx {
       }
     }
     catch(std::exception& e) {
-      throw;
+      std::cout<<"Caught exception: \n"<<e.what()<<std::endl;
     }
   }
   
   Plugin::Plugin(const Plugin& other)
   {
-    setName(other.pluginName);
-    setType(other.pluginType);
-    setVers(other.pluginVersion);
-    setFileName(other.filename);
-  }
-  
-  void Plugin :: clearMembers()
-  {
-   delete[] pluginName;
-   delete[] pluginType;
-   delete[] filename;
-   delete[] pluginVersion;
-    
-   pluginType=nullptr;
-   pluginName=nullptr;
-   filename=nullptr;
-   pluginVersion=nullptr;
-  } 
-  
-  Plugin :: ~Plugin() {
-      clearMembers();
+    try { 
+      pluginName = other.getName();
+      pluginType = other.getType();
+      pluginVersion = other.getVers();
+      filename = other.getFilename();
+      funcHandle = other.getFuncHandle();
+    }
+    catch(std::exception& e) {
+      std::cerr<<"Caught exception: \n"<<e.what();
     }
   }
   
-  Plugin_TextFunc* Plugin :: getTextData(SharedLib::Handle handle,
+  Plugin::Plugin(const Plugin* other)
+  {
+    try { 
+      pluginName = other->getName();
+      pluginType = other->getType();
+      pluginVersion = other->getVers();
+      filename = other->getFilename();
+      funcHandle = other->getFuncHandle();
+    }
+    catch(std::exception& e) {
+      std::cerr<<"Caught exception: \n"<<e.what();
+    }
+  }
+  
+  Plugin& Plugin :: operator= (const Plugin& other) {
+    try {
+      pluginName = other.pluginName;
+      pluginType = other.pluginType;
+      pluginVersion = other.pluginVersion;
+      filename = other.filename;
+      funcHandle = other.getFuncHandle();
+    }
+    catch(std::exception& e) {
+      std::cerr<<"Caught exception: \n"<<e.what();
+    }
+    return *this;
+  }
+  
+  Plugin::Plugin_TextFunc Plugin :: getTextData(SharedLib::Handle handle,
                                          const char* funcname,
-                                         std::string& filename)
+                                         const std::string& filename)
   {
-   Plugin_TextFunc textHandle;
-   if(!handle) handle = SharedLib::Load(filename);     
+    Plugin_TextFunc textHandle;
+    if(!handle) handle = SharedLib::Load(filename);     
       if(handle != nullptr){
-         textHandle = SharedLib::GetFunctionPointer
-                      <Plugin_TextFunc>(handle,funcname);
-         if(funcHandle != nullptr) return textHandle();             
+        textHandle = SharedLib::GetFunctionPointer
+                     <Plugin::Plugin_TextFunc>(handle,funcname);
+        if(funcHandle != nullptr) return textHandle;             
       }
-   return nullptr;
+    return nullptr;
   } 
   
-  PluginInterface* Plugin :: getNewPlugin(SharedLib::Handle handle,
+  Plugin::PluginFactoryFunc Plugin :: getNewPlugin(SharedLib::Handle handle,
                                           const char* funcname,
-                                          std::string& filename)
+                                          const std::string& filename)
   {
-   PluginFactoryFunc funcHandle; 
-   if(!handle) handle = SharedLib::Load(filename);     
+    PluginFactoryFunc funcHandle; 
+    if(!handle) handle = SharedLib::Load(filename);     
       if(handle != nullptr){
-         funcHandle = SharedLib::GetFunctionPointer
-                      <PluginFactoryFunc>(handle,funcname);
-         if(funcHandle != nullptr) return funcHandle();             
+        funcHandle = SharedLib::GetFunctionPointer
+                     <Plugin::PluginFactoryFunc>(handle,funcname);
+          if(funcHandle != nullptr) return funcHandle;             
       }
-   return nullptr;
+    return nullptr;
   } 
   
-  void Plugin :: setName(char * nm)
-  {
-   pluginName=new char[strlen(nm)+1];
-   strcpy(pluginName,nm);
+  void Plugin :: setName(const char* name) {
+    pluginName.assign(name);
   }
   
-  void Plugin :: setType(char * nm)
-  {
-   pluginType=new char[strlen(nm)+1];
-   strcpy(pluginType,nm);
+  void Plugin :: setName(const std::string& name) {
+    pluginName = name;
   }
   
-  void Plugin :: setFileName(char * nm)
-  {
-   filename=new char[strlen(nm)+1];
-   strcpy(filename,nm);
+  void Plugin :: setType(const char* type) {
+    pluginType.assign(type);
   }
   
-  void Plugin :: setVers(char* v)
-  {
-     pluginVersion = new char[strlen(v)+1];   
-     strcpy(pluginVersion,v);
+  void Plugin :: setType(const std::string& type) {
+    pluginType = type;
+  }
+  
+  void Plugin :: setFileName(const char* fname) {
+    filename.assign(fname);
+  }
+  
+  void Plugin :: setFileName(const std::string& fname) {
+    filename = fname; 
+  }
+
+  void Plugin :: setVers(const char* vers) {
+     pluginVersion.assign(vers);
+  }
+  
+  void Plugin :: setVers(const std::string& vers) {
+    pluginVersion = vers;
   }
 } // namespace Tryx
