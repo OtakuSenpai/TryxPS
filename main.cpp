@@ -1,25 +1,36 @@
 #include <iostream>
 #include <string>
+#include <stdexcept> 
+#include <cstring>
 #include "kernel.hpp"
-#include <stdexcept>
 
 #define TRYX_SOURCE 1
 
 using namespace Tryx;
 
-int main() {
+int main(int argc, char* argv[]) {
   try {
-    Kernel k;
     std::string s;
-    std::cout<<"Enter the path to the shared library: ";
-    std::cin>>s; std::cout<<"\n";
-    k.loadPlugins(s,true);
-    std::cout<<"Size: "<<k.getSize()<<std::endl;
-    std::string temp = k.getPluginName(0);
-    std::cout<<"Name: "<<temp<<std::endl;
-    PluginInterface *p = k.retFuncHandle(temp);
-    p->onCommand("Hello world!!");
-    delete p;
+    if((argc < 2) || (strcmp(argv[1],"-h") == 0)) {
+      std::cout<<"\n\nCommand parameters are:- \n"
+               <<"   -h :           Prints this help \n"
+               <<"   -f <folder> :  Loads folder \n\n";
+    }
+    else if(strcmp(argv[1],"-f") == 0) {
+      s.assign(argv[2]);
+    }
+    if(s.size() != 0) {
+      Kernel k;
+      k.loadPlugins(s,true);
+      std::cout<<"Size: "<<k.getSize()<<std::endl;
+      int pos = k.getFuncPos("Plugin1");
+      std::string temp = k.getPluginName(pos);
+      PluginInterface *p = k.getFuncHandle(temp);
+      std::cout<<p->onCommand("Hello world!!")<<"\n";
+      delete p;
+      
+    }
+    else std::cout<<"Empty parameters. See help. \n";
   }
   catch(std::exception& e) {
     std::cout<<"Caught exception: \n"<<e.what();

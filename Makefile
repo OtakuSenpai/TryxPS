@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/neelz/Desktop/Projects/TryxPS
+CMAKE_SOURCE_DIR = /home/neelz/C++_Workspace/Ma_Projects/CLI_Projects/TryxPS
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/neelz/Desktop/Projects/TryxPS
+CMAKE_BINARY_DIR = /home/neelz/C++_Workspace/Ma_Projects/CLI_Projects/TryxPS
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/neelz/Desktop/Projects/TryxPS/CMakeFiles /home/neelz/Desktop/Projects/TryxPS/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/neelz/C++_Workspace/Ma_Projects/CLI_Projects/TryxPS/CMakeFiles /home/neelz/C++_Workspace/Ma_Projects/CLI_Projects/TryxPS/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/neelz/Desktop/Projects/TryxPS/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/neelz/C++_Workspace/Ma_Projects/CLI_Projects/TryxPS/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -111,17 +111,97 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named a.out
+# Target rules for targets named pmain
 
 # Build rule for target.
-a.out: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 a.out
-.PHONY : a.out
+pmain: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 pmain
+.PHONY : pmain
 
 # fast build rule for target.
-a.out/fast:
-	$(MAKE) -f CMakeFiles/a.out.dir/build.make CMakeFiles/a.out.dir/build
-.PHONY : a.out/fast
+pmain/fast:
+	$(MAKE) -f CMakeFiles/pmain.dir/build.make CMakeFiles/pmain.dir/build
+.PHONY : pmain/fast
+
+#=============================================================================
+# Target rules for targets named plugin1
+
+# Build rule for target.
+plugin1: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 plugin1
+.PHONY : plugin1
+
+# fast build rule for target.
+plugin1/fast:
+	$(MAKE) -f CMakeFiles/plugin1.dir/build.make CMakeFiles/plugin1.dir/build
+.PHONY : plugin1/fast
+
+#=============================================================================
+# Target rules for targets named tryxps
+
+# Build rule for target.
+tryxps: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 tryxps
+.PHONY : tryxps
+
+# fast build rule for target.
+tryxps/fast:
+	$(MAKE) -f CMakeFiles/tryxps.dir/build.make CMakeFiles/tryxps.dir/build
+.PHONY : tryxps/fast
+
+examples/plugin1.o: examples/plugin1.cpp.o
+
+.PHONY : examples/plugin1.o
+
+# target to build an object file
+examples/plugin1.cpp.o:
+	$(MAKE) -f CMakeFiles/plugin1.dir/build.make CMakeFiles/plugin1.dir/examples/plugin1.cpp.o
+.PHONY : examples/plugin1.cpp.o
+
+examples/plugin1.i: examples/plugin1.cpp.i
+
+.PHONY : examples/plugin1.i
+
+# target to preprocess a source file
+examples/plugin1.cpp.i:
+	$(MAKE) -f CMakeFiles/plugin1.dir/build.make CMakeFiles/plugin1.dir/examples/plugin1.cpp.i
+.PHONY : examples/plugin1.cpp.i
+
+examples/plugin1.s: examples/plugin1.cpp.s
+
+.PHONY : examples/plugin1.s
+
+# target to generate assembly for a file
+examples/plugin1.cpp.s:
+	$(MAKE) -f CMakeFiles/plugin1.dir/build.make CMakeFiles/plugin1.dir/examples/plugin1.cpp.s
+.PHONY : examples/plugin1.cpp.s
+
+main.o: main.cpp.o
+
+.PHONY : main.o
+
+# target to build an object file
+main.cpp.o:
+	$(MAKE) -f CMakeFiles/pmain.dir/build.make CMakeFiles/pmain.dir/main.cpp.o
+.PHONY : main.cpp.o
+
+main.i: main.cpp.i
+
+.PHONY : main.i
+
+# target to preprocess a source file
+main.cpp.i:
+	$(MAKE) -f CMakeFiles/pmain.dir/build.make CMakeFiles/pmain.dir/main.cpp.i
+.PHONY : main.cpp.i
+
+main.s: main.cpp.s
+
+.PHONY : main.s
+
+# target to generate assembly for a file
+main.cpp.s:
+	$(MAKE) -f CMakeFiles/pmain.dir/build.make CMakeFiles/pmain.dir/main.cpp.s
+.PHONY : main.cpp.s
 
 src/kernel.o: src/kernel.cpp.o
 
@@ -129,7 +209,8 @@ src/kernel.o: src/kernel.cpp.o
 
 # target to build an object file
 src/kernel.cpp.o:
-	$(MAKE) -f CMakeFiles/a.out.dir/build.make CMakeFiles/a.out.dir/src/kernel.cpp.o
+	$(MAKE) -f CMakeFiles/pmain.dir/build.make CMakeFiles/pmain.dir/src/kernel.cpp.o
+	$(MAKE) -f CMakeFiles/tryxps.dir/build.make CMakeFiles/tryxps.dir/src/kernel.cpp.o
 .PHONY : src/kernel.cpp.o
 
 src/kernel.i: src/kernel.cpp.i
@@ -138,7 +219,8 @@ src/kernel.i: src/kernel.cpp.i
 
 # target to preprocess a source file
 src/kernel.cpp.i:
-	$(MAKE) -f CMakeFiles/a.out.dir/build.make CMakeFiles/a.out.dir/src/kernel.cpp.i
+	$(MAKE) -f CMakeFiles/pmain.dir/build.make CMakeFiles/pmain.dir/src/kernel.cpp.i
+	$(MAKE) -f CMakeFiles/tryxps.dir/build.make CMakeFiles/tryxps.dir/src/kernel.cpp.i
 .PHONY : src/kernel.cpp.i
 
 src/kernel.s: src/kernel.cpp.s
@@ -147,7 +229,8 @@ src/kernel.s: src/kernel.cpp.s
 
 # target to generate assembly for a file
 src/kernel.cpp.s:
-	$(MAKE) -f CMakeFiles/a.out.dir/build.make CMakeFiles/a.out.dir/src/kernel.cpp.s
+	$(MAKE) -f CMakeFiles/pmain.dir/build.make CMakeFiles/pmain.dir/src/kernel.cpp.s
+	$(MAKE) -f CMakeFiles/tryxps.dir/build.make CMakeFiles/tryxps.dir/src/kernel.cpp.s
 .PHONY : src/kernel.cpp.s
 
 src/plugin.o: src/plugin.cpp.o
@@ -156,7 +239,8 @@ src/plugin.o: src/plugin.cpp.o
 
 # target to build an object file
 src/plugin.cpp.o:
-	$(MAKE) -f CMakeFiles/a.out.dir/build.make CMakeFiles/a.out.dir/src/plugin.cpp.o
+	$(MAKE) -f CMakeFiles/pmain.dir/build.make CMakeFiles/pmain.dir/src/plugin.cpp.o
+	$(MAKE) -f CMakeFiles/tryxps.dir/build.make CMakeFiles/tryxps.dir/src/plugin.cpp.o
 .PHONY : src/plugin.cpp.o
 
 src/plugin.i: src/plugin.cpp.i
@@ -165,7 +249,8 @@ src/plugin.i: src/plugin.cpp.i
 
 # target to preprocess a source file
 src/plugin.cpp.i:
-	$(MAKE) -f CMakeFiles/a.out.dir/build.make CMakeFiles/a.out.dir/src/plugin.cpp.i
+	$(MAKE) -f CMakeFiles/pmain.dir/build.make CMakeFiles/pmain.dir/src/plugin.cpp.i
+	$(MAKE) -f CMakeFiles/tryxps.dir/build.make CMakeFiles/tryxps.dir/src/plugin.cpp.i
 .PHONY : src/plugin.cpp.i
 
 src/plugin.s: src/plugin.cpp.s
@@ -174,7 +259,8 @@ src/plugin.s: src/plugin.cpp.s
 
 # target to generate assembly for a file
 src/plugin.cpp.s:
-	$(MAKE) -f CMakeFiles/a.out.dir/build.make CMakeFiles/a.out.dir/src/plugin.cpp.s
+	$(MAKE) -f CMakeFiles/pmain.dir/build.make CMakeFiles/pmain.dir/src/plugin.cpp.s
+	$(MAKE) -f CMakeFiles/tryxps.dir/build.make CMakeFiles/tryxps.dir/src/plugin.cpp.s
 .PHONY : src/plugin.cpp.s
 
 # Help Target
@@ -184,8 +270,16 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... rebuild_cache"
-	@echo "... a.out"
 	@echo "... edit_cache"
+	@echo "... pmain"
+	@echo "... plugin1"
+	@echo "... tryxps"
+	@echo "... examples/plugin1.o"
+	@echo "... examples/plugin1.i"
+	@echo "... examples/plugin1.s"
+	@echo "... main.o"
+	@echo "... main.i"
+	@echo "... main.s"
 	@echo "... src/kernel.o"
 	@echo "... src/kernel.i"
 	@echo "... src/kernel.s"

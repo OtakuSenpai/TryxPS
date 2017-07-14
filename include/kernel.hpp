@@ -80,10 +80,12 @@ namespace Tryx {
        void unloadPlugins();
        
        //Helper functions
-       PluginInterface* retFuncHandle(const std::string& identifier);
-       std::string getPluginName(const int& index);
+       PluginInterface* getFuncHandle(const std::string& identifier);
+       std::string getPluginName (const int& index) const;
+       int getFuncPos (const std::string& identifier) const;
+       int getFuncPos (const char* identifier) const;
        
-       int getSize() { return loadedPlugins.size(); }
+       int getSize() const{ return loadedPlugins.size(); }
   };
 
 } // namespace Tryx

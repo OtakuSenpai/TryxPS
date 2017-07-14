@@ -102,21 +102,21 @@ namespace Tryx {
           if(strcmp(dirp->d_name,".") == 0 || strcmp(dirp->d_name,"..") == 0) continue;
           else { 
             temp.assign(dirp->d_name);
-            std::cout<<"Contents: "<<dirp->d_name<<std::endl;
             filepath = path + std::string("/") + temp;
           }     
           if(stat( filepath.c_str(), &sb ) && (S_ISDIR( sb.st_mode ))) continue;              
           else if(stat(filepath.c_str(), &sb) == 0 && S_ISREG(sb.st_mode))
           { 
             dllHandle = SharedLib::Load(filepath);
-            curPlugin = new Plugin(static_cast<SharedLib::Handle&>
+            if(dllHandle != nullptr) {
+              curPlugin = new Plugin(static_cast<SharedLib::Handle&>
                                   (dllHandle),filepath);
-            temp2 = curPlugin->getName();
-            loadedPlugins.push_back(new Node(temp2,curPlugin));
-            delete curPlugin; curPlugin = nullptr;                  
+              temp2 = curPlugin->getName();
+              loadedPlugins.push_back(new Node(temp2,curPlugin));
+              delete curPlugin; curPlugin = nullptr;
+            }
           }
           filepath.clear();
-          SharedLib::Unload(dllHandle);
         } 
         catch(std::exception& e)
         {
@@ -152,7 +152,7 @@ namespace Tryx {
     }
   }  
 
-  PluginInterface* Kernel :: retFuncHandle(const std::string& iden) {
+  PluginInterface* Kernel :: getFuncHandle(const std::string& iden) {
     PluginInterface* p_plugin;
     try {
       for(auto* i : loadedPlugins) {
@@ -169,8 +169,48 @@ namespace Tryx {
       return p_plugin;
     else return nullptr;
   }
+  
+  int Kernel :: getFuncPos (const std::string& iden) const {
+    int pos = -1;
+    std::string tempRet;
+    try {
+      for(size_t i = 0; i < loadedPlugins.size(); i++) {
+        tempRet.clear();
+        tempRet = loadedPlugins[i]->getName();
+        if(tempRet == iden) {
+          pos = i;
+        }
+      }
+      if(pos == -1) throw std::runtime_error("kernel.cpp : line 193,couldn't find the plugin.");
+    }
+    catch(std::exception& e) {
+      std::cout<<"Caught exception: \n"<<e.what();
+    }
     
-  std::string Kernel :: getPluginName(const int& index) {
+    return pos;
+  }
+  
+  int Kernel :: getFuncPos (const char* iden) const {
+    int pos = -1;
+    std::string tempRet,identifier;
+    identifier.assign(iden); 
+    try {
+      for(size_t i = 0; i < loadedPlugins.size(); i++) {
+        tempRet.clear();
+        tempRet = loadedPlugins[i]->getName();
+        if(tempRet == identifier) {
+          pos = i;
+        }
+      }
+      if(pos == -1) throw std::runtime_error("kernel.cpp : line 193,couldn't find the plugin.");
+    }
+    catch(std::exception& e) {
+      std::cout<<"Caught exception: \n"<<e.what();
+    }
+    return pos;
+  }  
+    
+  std::string Kernel :: getPluginName (const int& index) const {
     std::string s;
     try {
       s = loadedPlugins.at(index)->getName();
