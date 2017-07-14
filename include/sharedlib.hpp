@@ -24,6 +24,7 @@
 #include <string>
 #include <stdexcept>
 #include <iostream>
+#include <cstdlib>
 
 #ifdef TRYX_WIN32
 
@@ -110,6 +111,7 @@ class SharedLib{
         }
         catch(std::exception& e) {
           std::cerr<<"Caught exception: \n"<<e.what(); 
+          std::exit(EXIT_FAILURE);
         }   
         return sharedObject;
       }
@@ -126,6 +128,7 @@ class SharedLib{
         }
         catch(std::exception& e) {
           std::cerr<<"Caught exception: \n"<<e.what();
+          std::exit(EXIT_FAILURE);
         } 
         return sharedObject;
       } 
@@ -140,6 +143,7 @@ class SharedLib{
         }
         catch(std::exception& e) {
           std::cerr<<"Caught exception: \n"<<e.what();
+          std::exit(EXIT_FAILURE);
         }   
       }
       
@@ -158,6 +162,7 @@ class SharedLib{
         }
         catch(std::exception& e) {
           std::cerr<<"Caught exception: \n"<<e.what();
+          std::exit(EXIT_FAILURE);
         }
         return reinterpret_cast<TSignature>(funcAddress);  
       }

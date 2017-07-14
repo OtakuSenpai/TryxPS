@@ -133,10 +133,12 @@ namespace Tryx {
       SharedLib::Handle dllHandle;
       Plugin* curPlugin;
       dllHandle = SharedLib::Load(path);
-      curPlugin = new Plugin(static_cast<SharedLib::Handle&>
+      if(dllHandle !=nullptr) {
+        curPlugin = new Plugin(static_cast<SharedLib::Handle&>
                             (dllHandle),path);
-      std::string temp = curPlugin->getName();
-      loadedPlugins.push_back(new Node(temp,curPlugin));
+        std::string temp = curPlugin->getName();
+        loadedPlugins.push_back(new Node(temp,curPlugin));
+      }
     }
     catch(std::exception& e) {
       std::cout<<"Caught exception: \n"<<e.what();
@@ -181,7 +183,7 @@ namespace Tryx {
           pos = i;
         }
       }
-      if(pos == -1) throw std::runtime_error("kernel.cpp : line 193,couldn't find the plugin.");
+      if(pos == -1) throw std::runtime_error("kernel.cpp : line 193,couldn't find the plugin.\n");
     }
     catch(std::exception& e) {
       std::cout<<"Caught exception: \n"<<e.what();

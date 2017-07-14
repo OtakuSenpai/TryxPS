@@ -14,14 +14,18 @@ int main(int argc, char* argv[]) {
     if((argc < 2) || (strcmp(argv[1],"-h") == 0)) {
       std::cout<<"\n\nCommand parameters are:- \n"
                <<"   -h :           Prints this help \n"
-               <<"   -f <folder> :  Loads folder \n\n";
+               <<"   -f <folder> :  Loads folder \n"
+               <<"   -fp <path> :   Loads plugin at <path> \n\n\n";
     }
-    else if(strcmp(argv[1],"-f") == 0) {
+    else if((strcmp(argv[1],"-f") == 0) || (strcmp(argv[1],"-fp") == 0)) {
       s.assign(argv[2]);
     }
     if(s.size() != 0) {
       Kernel k;
-      k.loadPlugins(s,true);
+      if(strcmp(argv[1],"-f") == 0)
+        k.loadPlugins(s,true);
+      else if(strcmp(argv[1],"-fp") == 0)
+        k.loadPlugin(s);  
       std::cout<<"Size: "<<k.getSize()<<std::endl;
       int pos = k.getFuncPos("Plugin1");
       std::string temp = k.getPluginName(pos);
