@@ -48,24 +48,57 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/neelz/C++_Workspace/Ma_Projects/CLI_Projects/TryxPS
+CMAKE_SOURCE_DIR = /home/neelz/Programming_Workspace/C++_Workspace/Ma_Projects/CLI_Projects/TsukiBot/TryxPs
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/neelz/C++_Workspace/Ma_Projects/CLI_Projects/TryxPS
+CMAKE_BINARY_DIR = /home/neelz/Programming_Workspace/C++_Workspace/Ma_Projects/CLI_Projects/TsukiBot/TryxPs
 
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target rebuild_cache
-rebuild_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/usr/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : rebuild_cache
+# Special rule for the target install/strip
+install/strip: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip
 
-# Special rule for the target rebuild_cache
-rebuild_cache/fast: rebuild_cache
+# Special rule for the target install/strip
+install/strip/fast: install/strip
 
-.PHONY : rebuild_cache/fast
+.PHONY : install/strip/fast
+
+# Special rule for the target install/local
+install/local: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local
+
+# Special rule for the target install/local
+install/local/fast: install/local
+
+.PHONY : install/local/fast
+
+# Special rule for the target install
+install: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/usr/bin/cmake -P cmake_install.cmake
+.PHONY : install
+
+# Special rule for the target install
+install/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/usr/bin/cmake -P cmake_install.cmake
+.PHONY : install/fast
+
+# Special rule for the target list_install_components
+list_install_components:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Devel\" \"Unspecified\""
+.PHONY : list_install_components
+
+# Special rule for the target list_install_components
+list_install_components/fast: list_install_components
+
+.PHONY : list_install_components/fast
 
 # Special rule for the target edit_cache
 edit_cache:
@@ -78,11 +111,22 @@ edit_cache/fast: edit_cache
 
 .PHONY : edit_cache/fast
 
+# Special rule for the target rebuild_cache
+rebuild_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
+	/usr/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : rebuild_cache
+
+# Special rule for the target rebuild_cache
+rebuild_cache/fast: rebuild_cache
+
+.PHONY : rebuild_cache/fast
+
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/neelz/C++_Workspace/Ma_Projects/CLI_Projects/TryxPS/CMakeFiles /home/neelz/C++_Workspace/Ma_Projects/CLI_Projects/TryxPS/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/neelz/Programming_Workspace/C++_Workspace/Ma_Projects/CLI_Projects/TsukiBot/TryxPs/CMakeFiles /home/neelz/Programming_Workspace/C++_Workspace/Ma_Projects/CLI_Projects/TsukiBot/TryxPs/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/neelz/C++_Workspace/Ma_Projects/CLI_Projects/TryxPS/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/neelz/Programming_Workspace/C++_Workspace/Ma_Projects/CLI_Projects/TsukiBot/TryxPs/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -111,17 +155,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named pmain
+# Target rules for targets named tryxps
 
 # Build rule for target.
-pmain: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 pmain
-.PHONY : pmain
+tryxps: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 tryxps
+.PHONY : tryxps
 
 # fast build rule for target.
-pmain/fast:
-	$(MAKE) -f CMakeFiles/pmain.dir/build.make CMakeFiles/pmain.dir/build
-.PHONY : pmain/fast
+tryxps/fast:
+	$(MAKE) -f CMakeFiles/tryxps.dir/build.make CMakeFiles/tryxps.dir/build
+.PHONY : tryxps/fast
 
 #=============================================================================
 # Target rules for targets named plugin1
@@ -137,17 +181,17 @@ plugin1/fast:
 .PHONY : plugin1/fast
 
 #=============================================================================
-# Target rules for targets named tryxps
+# Target rules for targets named pmain
 
 # Build rule for target.
-tryxps: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 tryxps
-.PHONY : tryxps
+pmain: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 pmain
+.PHONY : pmain
 
 # fast build rule for target.
-tryxps/fast:
-	$(MAKE) -f CMakeFiles/tryxps.dir/build.make CMakeFiles/tryxps.dir/build
-.PHONY : tryxps/fast
+pmain/fast:
+	$(MAKE) -f CMakeFiles/pmain.dir/build.make CMakeFiles/pmain.dir/build
+.PHONY : pmain/fast
 
 examples/plugin1.o: examples/plugin1.cpp.o
 
@@ -209,8 +253,8 @@ src/kernel.o: src/kernel.cpp.o
 
 # target to build an object file
 src/kernel.cpp.o:
-	$(MAKE) -f CMakeFiles/pmain.dir/build.make CMakeFiles/pmain.dir/src/kernel.cpp.o
 	$(MAKE) -f CMakeFiles/tryxps.dir/build.make CMakeFiles/tryxps.dir/src/kernel.cpp.o
+	$(MAKE) -f CMakeFiles/pmain.dir/build.make CMakeFiles/pmain.dir/src/kernel.cpp.o
 .PHONY : src/kernel.cpp.o
 
 src/kernel.i: src/kernel.cpp.i
@@ -219,8 +263,8 @@ src/kernel.i: src/kernel.cpp.i
 
 # target to preprocess a source file
 src/kernel.cpp.i:
-	$(MAKE) -f CMakeFiles/pmain.dir/build.make CMakeFiles/pmain.dir/src/kernel.cpp.i
 	$(MAKE) -f CMakeFiles/tryxps.dir/build.make CMakeFiles/tryxps.dir/src/kernel.cpp.i
+	$(MAKE) -f CMakeFiles/pmain.dir/build.make CMakeFiles/pmain.dir/src/kernel.cpp.i
 .PHONY : src/kernel.cpp.i
 
 src/kernel.s: src/kernel.cpp.s
@@ -229,8 +273,8 @@ src/kernel.s: src/kernel.cpp.s
 
 # target to generate assembly for a file
 src/kernel.cpp.s:
-	$(MAKE) -f CMakeFiles/pmain.dir/build.make CMakeFiles/pmain.dir/src/kernel.cpp.s
 	$(MAKE) -f CMakeFiles/tryxps.dir/build.make CMakeFiles/tryxps.dir/src/kernel.cpp.s
+	$(MAKE) -f CMakeFiles/pmain.dir/build.make CMakeFiles/pmain.dir/src/kernel.cpp.s
 .PHONY : src/kernel.cpp.s
 
 src/plugin.o: src/plugin.cpp.o
@@ -239,8 +283,8 @@ src/plugin.o: src/plugin.cpp.o
 
 # target to build an object file
 src/plugin.cpp.o:
-	$(MAKE) -f CMakeFiles/pmain.dir/build.make CMakeFiles/pmain.dir/src/plugin.cpp.o
 	$(MAKE) -f CMakeFiles/tryxps.dir/build.make CMakeFiles/tryxps.dir/src/plugin.cpp.o
+	$(MAKE) -f CMakeFiles/pmain.dir/build.make CMakeFiles/pmain.dir/src/plugin.cpp.o
 .PHONY : src/plugin.cpp.o
 
 src/plugin.i: src/plugin.cpp.i
@@ -249,8 +293,8 @@ src/plugin.i: src/plugin.cpp.i
 
 # target to preprocess a source file
 src/plugin.cpp.i:
-	$(MAKE) -f CMakeFiles/pmain.dir/build.make CMakeFiles/pmain.dir/src/plugin.cpp.i
 	$(MAKE) -f CMakeFiles/tryxps.dir/build.make CMakeFiles/tryxps.dir/src/plugin.cpp.i
+	$(MAKE) -f CMakeFiles/pmain.dir/build.make CMakeFiles/pmain.dir/src/plugin.cpp.i
 .PHONY : src/plugin.cpp.i
 
 src/plugin.s: src/plugin.cpp.s
@@ -259,8 +303,8 @@ src/plugin.s: src/plugin.cpp.s
 
 # target to generate assembly for a file
 src/plugin.cpp.s:
-	$(MAKE) -f CMakeFiles/pmain.dir/build.make CMakeFiles/pmain.dir/src/plugin.cpp.s
 	$(MAKE) -f CMakeFiles/tryxps.dir/build.make CMakeFiles/tryxps.dir/src/plugin.cpp.s
+	$(MAKE) -f CMakeFiles/pmain.dir/build.make CMakeFiles/pmain.dir/src/plugin.cpp.s
 .PHONY : src/plugin.cpp.s
 
 # Help Target
@@ -269,11 +313,15 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
-	@echo "... rebuild_cache"
-	@echo "... edit_cache"
-	@echo "... pmain"
-	@echo "... plugin1"
+	@echo "... install/strip"
+	@echo "... install/local"
+	@echo "... install"
 	@echo "... tryxps"
+	@echo "... plugin1"
+	@echo "... list_install_components"
+	@echo "... pmain"
+	@echo "... edit_cache"
+	@echo "... rebuild_cache"
 	@echo "... examples/plugin1.o"
 	@echo "... examples/plugin1.i"
 	@echo "... examples/plugin1.s"

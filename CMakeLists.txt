@@ -1,49 +1,89 @@
-cmake_minimum_required (VERSION 3.0)
+cmake_minimum_required(VERSION 3.7)
 
-# Project's name
-project (TryxPS)
+project(TryxPS)
 
-# Versioning !!
-set (TryxPS_VERSION_MAJOR 1)
-set (My_IRCBot_VERSION_MINOR 0)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE ON)
 
-#set standard
+set(TryxPS_VERSION 0.7)
+
+include(GenerateExportHeader)
+
 set(CMAKE_CXX_EXTENSIONS 14)
 
-# set ouput dir
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-
-# set executable path
-
-# set library path
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-
-# set include directory
 include_directories("${PROJECT_SOURCE_DIR}/include")
 
-# set sources
 set(SOURCES "src/plugin.cpp"
-            "src/kernel.cpp")   
+            "src/kernel.cpp")
 
-# set headers
 set(HEADERS "include/config.hpp"
-                  "include/sharedlib.hpp"
-                  "include/plugininterface.hpp"
-                  "include/plugin.hpp"
-                  "include/kernel.hpp") 
+            "include/sharedlib.hpp"
+            "include/plugininterface.hpp"
+            "include/plugin.hpp"
+            "include/kernel.hpp")
 
-# compile flags
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic ")
-
-# linker flags
 add_library(plugin1 SHARED examples/plugin1.cpp ${HEADERS})
 
-# static flags
 add_library(tryxps STATIC ${SOURCES})
+target_link_libraries(tryxps ${CMAKE_DL_LIBS} ${HEADERS})
 
-# execute
+generate_export_header(tryxps)
+target_include_directories(tryxps PUBLIC
+       $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+       $<INSTALL_INTERFACE:include>)
+
+#generate_export_header(${HEADERS})
+
+install(TARGETS tryxps EXPORT TryxPSTargets
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib
+        RUNTIME DESTINATION bin
+        INCLUDES DESTINATION include)
+
+install(
+  FILES
+    kernel.h
+    "${CMAKE_CURRENT_BINARY_DIR}/tryxps_export.h"
+  DESTINATION
+    include
+  COMPONENT
+    Devel
+)
+
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file(
+  "${CMAKE_CURRENT_BINARY_DIR}/cmake/TryxPSConfigVersion.cmake"
+  VERSION ${TryxPS_VERSION}
+  COMPATIBILITY AnyNewerVersion)
+
+export(EXPORT TryxPSTargets
+  FILE "${CMAKE_CURRENT_BINARY_DIR}/cmake/TryxPSTargets.cmake"
+  NAMESPACE TryxPS::)
+
+configure_file(cmake/TryxPSConfig.cmake
+  "${CMAKE_CURRENT_BINARY_DIR}/cmake/TryxPSConfig.cmake"
+  COPYONLY
+)
+
+set(ConfigPackageLocation lib/TryxPS)
+install(EXPORT TryxPSTargets
+  FILE
+    TryxPSTargets.cmake
+  NAMESPACE
+    TryxPS::
+  DESTINATION
+    ${ConfigPackageLocation}
+)
+install(
+  FILES
+    cmake/TryxPSConfig.cmake
+    "${CMAKE_CURRENT_BINARY_DIR}/cmake/TryxPSConfigVersion.cmake"
+  DESTINATION
+    ${ConfigPackageLocation}
+  COMPONENT
+    Devel
+)
+
 add_executable(pmain "main.cpp" ${SOURCES} ${HEADERS})
-
 target_link_libraries(pmain ${CMAKE_DL_LIBS})
-
