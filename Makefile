@@ -48,24 +48,13 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/neelz/Programming_Workspace/C++_Workspace/Ma_Projects/CLI_Projects/TsukiBot/TryxPs
+CMAKE_SOURCE_DIR = /home/neelz/Programming_Workspace/C++_Workspace/Ma_Projects/CLI_Projects/TsukiBot/TryxPS
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/neelz/Programming_Workspace/C++_Workspace/Ma_Projects/CLI_Projects/TsukiBot/TryxPs
+CMAKE_BINARY_DIR = /home/neelz/Programming_Workspace/C++_Workspace/Ma_Projects/CLI_Projects/TsukiBot/TryxPS
 
 #=============================================================================
 # Targets provided globally by CMake.
-
-# Special rule for the target install/strip
-install/strip: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
-	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
-.PHONY : install/strip
-
-# Special rule for the target install/strip
-install/strip/fast: install/strip
-
-.PHONY : install/strip/fast
 
 # Special rule for the target install/local
 install/local: preinstall
@@ -100,17 +89,6 @@ list_install_components/fast: list_install_components
 
 .PHONY : list_install_components/fast
 
-# Special rule for the target edit_cache
-edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
-.PHONY : edit_cache
-
-# Special rule for the target edit_cache
-edit_cache/fast: edit_cache
-
-.PHONY : edit_cache/fast
-
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
@@ -122,11 +100,33 @@ rebuild_cache/fast: rebuild_cache
 
 .PHONY : rebuild_cache/fast
 
+# Special rule for the target install/strip
+install/strip: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip
+
+# Special rule for the target install/strip
+install/strip/fast: install/strip
+
+.PHONY : install/strip/fast
+
+# Special rule for the target edit_cache
+edit_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
+	/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+.PHONY : edit_cache
+
+# Special rule for the target edit_cache
+edit_cache/fast: edit_cache
+
+.PHONY : edit_cache/fast
+
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/neelz/Programming_Workspace/C++_Workspace/Ma_Projects/CLI_Projects/TsukiBot/TryxPs/CMakeFiles /home/neelz/Programming_Workspace/C++_Workspace/Ma_Projects/CLI_Projects/TsukiBot/TryxPs/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/neelz/Programming_Workspace/C++_Workspace/Ma_Projects/CLI_Projects/TsukiBot/TryxPS/CMakeFiles /home/neelz/Programming_Workspace/C++_Workspace/Ma_Projects/CLI_Projects/TsukiBot/TryxPS/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/neelz/Programming_Workspace/C++_Workspace/Ma_Projects/CLI_Projects/TsukiBot/TryxPs/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/neelz/Programming_Workspace/C++_Workspace/Ma_Projects/CLI_Projects/TsukiBot/TryxPS/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -155,19 +155,6 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named tryxps
-
-# Build rule for target.
-tryxps: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 tryxps
-.PHONY : tryxps
-
-# fast build rule for target.
-tryxps/fast:
-	$(MAKE) -f CMakeFiles/tryxps.dir/build.make CMakeFiles/tryxps.dir/build
-.PHONY : tryxps/fast
-
-#=============================================================================
 # Target rules for targets named plugin1
 
 # Build rule for target.
@@ -179,6 +166,19 @@ plugin1: cmake_check_build_system
 plugin1/fast:
 	$(MAKE) -f CMakeFiles/plugin1.dir/build.make CMakeFiles/plugin1.dir/build
 .PHONY : plugin1/fast
+
+#=============================================================================
+# Target rules for targets named tryxps
+
+# Build rule for target.
+tryxps: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 tryxps
+.PHONY : tryxps
+
+# fast build rule for target.
+tryxps/fast:
+	$(MAKE) -f CMakeFiles/tryxps.dir/build.make CMakeFiles/tryxps.dir/build
+.PHONY : tryxps/fast
 
 #=============================================================================
 # Target rules for targets named pmain
@@ -313,15 +313,15 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
-	@echo "... install/strip"
 	@echo "... install/local"
 	@echo "... install"
-	@echo "... tryxps"
-	@echo "... plugin1"
 	@echo "... list_install_components"
-	@echo "... pmain"
-	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... plugin1"
+	@echo "... tryxps"
+	@echo "... install/strip"
+	@echo "... edit_cache"
+	@echo "... pmain"
 	@echo "... examples/plugin1.o"
 	@echo "... examples/plugin1.i"
 	@echo "... examples/plugin1.s"

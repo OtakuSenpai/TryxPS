@@ -26,7 +26,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic ")
 add_library(plugin1 SHARED examples/plugin1.cpp ${HEADERS})
 
 add_library(tryxps STATIC ${SOURCES})
-target_link_libraries(tryxps ${CMAKE_DL_LIBS} ${HEADERS})
+target_link_libraries(tryxps ${CMAKE_DL_LIBS})
 
 generate_export_header(tryxps)
 target_include_directories(tryxps PUBLIC
