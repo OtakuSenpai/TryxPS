@@ -175,18 +175,12 @@ namespace Tryx {
   int Kernel :: getFuncPos (const std::string& iden) const {
     int pos = -1;
     std::string tempRet;
-    try {
-      for(size_t i = 0; i < loadedPlugins.size(); i++) {
-        tempRet.clear();
-        tempRet = loadedPlugins[i]->getName();
-        if(tempRet == iden) {
-          pos = i;
-        }
+    for(size_t i = 0; i < loadedPlugins.size(); i++) {
+      tempRet.clear();
+      tempRet = loadedPlugins[i]->getName();
+      if(tempRet == iden) {
+        pos = i;
       }
-      if(pos == -1) throw std::runtime_error("kernel.cpp : line 193,couldn't find the plugin.\n");
-    }
-    catch(std::exception& e) {
-      std::cout<<"Caught exception: \n"<<e.what();
     }
     
     return pos;
@@ -196,19 +190,14 @@ namespace Tryx {
     int pos = -1;
     std::string tempRet,identifier;
     identifier.assign(iden); 
-    try {
-      for(size_t i = 0; i < loadedPlugins.size(); i++) {
-        tempRet.clear();
-        tempRet = loadedPlugins[i]->getName();
-        if(tempRet == identifier) {
-          pos = i;
-        }
+    for(size_t i = 0; i < loadedPlugins.size(); i++) {
+      tempRet.clear();
+      tempRet = loadedPlugins[i]->getName();
+      if(tempRet == identifier) {
+        pos = i;
       }
-      if(pos == -1) throw std::runtime_error("kernel.cpp : line 193,couldn't find the plugin.");
     }
-    catch(std::exception& e) {
-      std::cout<<"Caught exception: \n"<<e.what();
-    }
+    
     return pos;
   }  
     
