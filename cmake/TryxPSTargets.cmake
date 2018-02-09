@@ -45,7 +45,7 @@ unset(_expectedTargets)
 add_library(TryxPS::tryxps STATIC IMPORTED)
 
 set_target_properties(TryxPS::tryxps PROPERTIES
-  INTERFACE_INCLUDE_DIRECTORIES "/home/neelz/Programming_Workspace/C++_Workspace/Ma_Projects/CLI_Projects/TsukiBot/TryxPS/include;/home/neelz/Programming_Workspace/C++_Workspace/Ma_Projects/CLI_Projects/TsukiBot/TryxPS;/home/neelz/Programming_Workspace/C++_Workspace/Ma_Projects/CLI_Projects/TsukiBot/TryxPS"
+  INTERFACE_INCLUDE_DIRECTORIES "/home/neelz/Programming_Workspace/C++_Workspace/Ma_Projects/CLI_Projects/TryxPS/include;/home/neelz/Programming_Workspace/C++_Workspace/Ma_Projects/CLI_Projects/TryxPS;/home/neelz/Programming_Workspace/C++_Workspace/Ma_Projects/CLI_Projects/TryxPS"
   INTERFACE_LINK_LIBRARIES "dl"
 )
 
@@ -53,7 +53,7 @@ set_target_properties(TryxPS::tryxps PROPERTIES
 set_property(TARGET TryxPS::tryxps APPEND PROPERTY IMPORTED_CONFIGURATIONS NOCONFIG)
 set_target_properties(TryxPS::tryxps PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_NOCONFIG "CXX"
-  IMPORTED_LOCATION_NOCONFIG "/home/neelz/Programming_Workspace/C++_Workspace/Ma_Projects/CLI_Projects/TsukiBot/TryxPS/libtryxps.a"
+  IMPORTED_LOCATION_NOCONFIG "/home/neelz/Programming_Workspace/C++_Workspace/Ma_Projects/CLI_Projects/TryxPS/libtryxps.a"
   )
 
 # This file does not depend on other imported targets which have

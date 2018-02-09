@@ -30,7 +30,7 @@ int main(int argc, char* argv[]) {
       int pos = k.getFuncPos("Plugin1");
       std::string temp = k.getPluginName(pos);
       PluginInterface *p = k.getFuncHandle(temp);
-      std::cout<<p->onCommand("Hello world!!")<<"\n";
+      std::cout<<p->onCommand("Hello","world!!")<<"\n";
       delete p;
       
     }

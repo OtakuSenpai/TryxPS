@@ -35,7 +35,7 @@ namespace Tryx{
         TRYX_API_EXP PluginInterface() {}
         TRYX_API_EXP virtual ~PluginInterface() {}
 
-        TRYX_API_EXP virtual char* onCommand(const char* data)=0;
+        TRYX_API_EXP virtual char* onCommand(const char* word,const char* data)=0;
    };
 } //namespace Tryx
 

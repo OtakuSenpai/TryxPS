@@ -16,9 +16,10 @@ Plugin1 :: ~Plugin1()
 
 }
 
-char* Plugin1 :: onCommand(const char* data) { 
+char* Plugin1 :: onCommand(const char* word,const char* data) { 
   std::cout<<"Returning data: "<<std::endl;
-  char* retValue = new char[std::strlen(data)+1];
+  char* retValue = new char[std::strlen(data)+std::strlen(word)+1];
+  std::strcpy(retValue,word);
   std::strcpy(retValue,data);
   return retValue;
 }
