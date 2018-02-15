@@ -85,6 +85,7 @@ namespace Tryx {
        int getFuncPos (const std::string& identifier) const;
        int getFuncPos (const char* identifier) const;
        
+       std::vector<Kernel::Node*> getPlugins() { return loadedPlugins; }
        int getSize() const{ return loadedPlugins.size(); }
   };
 

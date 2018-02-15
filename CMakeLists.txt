@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.7)
+cmake_minimum_required(VERSION 3.0)
 
 project(TryxPS)
 
@@ -22,7 +22,13 @@ set(HEADERS "include/config.hpp"
             "include/plugin.hpp"
             "include/kernel.hpp")
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic ")
+if(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
+  if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS 6.3)
+    message(FATAL_ERROR "g++ version must be at least 6.3!")
+ endif() 
+  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -O2")
+endif()
+
 add_library(plugin1 SHARED examples/plugin1.cpp ${HEADERS})
 
 add_library(tryxps STATIC ${SOURCES})
