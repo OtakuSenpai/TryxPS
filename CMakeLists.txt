@@ -49,7 +49,7 @@ install(TARGETS tryxps EXPORT TryxPSTargets
 
 install(
   FILES
-    kernel.h
+    kernel.hpp
     "${CMAKE_CURRENT_BINARY_DIR}/tryxps_export.h"
   DESTINATION
     include

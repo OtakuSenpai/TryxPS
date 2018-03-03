@@ -47,19 +47,17 @@ namespace Tryx{
       public:
           typedef HMODULE Handle;
       
-          TRYX_API_EXP static Handle Load(const std::string& path){
-             std::string pathWithExtension = path + std::string(".dll");
-             HMODULE mHandle = LoadLibraryA(pathWithExtension.c_str());
+          TRYX_API_EXP static Handle Load(const std::string& path) {
+			 std::string pathWithExtension = path;
+			 HMODULE mHandle = LoadLibraryA(pathWithExtension.c_str());
              if(mHandle == nullptr){
                 throw std::runtime_error("sharedlib.hpp : Line 40, couldn't load dll.");
              }
              return mHandle;
           }
           
-          TRYX_API_EXP static Handle Load(const char* path){
-           
+          TRYX_API_EXP static Handle Load(const char* path) {
              std::string pathWithExtension; pathWithExtension.assign(path);
-             pathWithExtension = pathWithExtension + std::string(".dll");
              HMODULE mHandle = LoadLibraryA(pathWithExtension.c_str());
              if(mHandle == nullptr){
                 throw std::runtime_error("sharedlib.hpp : Line 51, couldn't load dll.");
@@ -67,7 +65,7 @@ namespace Tryx{
              return mHandle;
           }
           
-          TRYX_API_EXP static void Unload(Handle sharedLibHandle){
+          TRYX_API_EXP static void Unload(Handle sharedLibHandle) {
              bool result = FreeLibrary(sharedLibHandle);
              if(result == false){
                 throw std::runtime_error("sharedlib.hpp : Line 49,couldn't unload dll.");
@@ -78,10 +76,9 @@ namespace Tryx{
           //in which the function will be looked up,plus the name of the function to
           //look up. Return type is a pointer to the specified function.
           
-          TRYX_API_EXP template<typename TSignature>
-          static TSignature GetFunctionPointer(Handle sharedLibHandle,
-                            const char* funcname)
-          {
+          template<typename TSignature>
+	      TRYX_API_EXP static TSignature GetFunctionPointer(
+			                  Handle sharedLibHandle,const char* funcname) {
              FARPROC funcAddress = GetProcAddress(sharedLibHandle,funcname);
              if(funcAddress == nullptr){
                 throw std::runtime_error("sharedlib.hpp : Line 63,couldn't find exported function.");
@@ -116,7 +113,7 @@ class SharedLib{
         return sharedObject;
       }
       
-      TRYX_API_EXP static Handle Load(const char* path){
+      TRYX_API_EXP static Handle Load(const char* path) {
         void* sharedObject;
         try {  
           std::string temp; temp.assign(path);
@@ -133,7 +130,7 @@ class SharedLib{
         return sharedObject;
       } 
       
-      TRYX_API_EXP static void Unload(Handle sharedLibHandle){
+      TRYX_API_EXP static void Unload(Handle sharedLibHandle) {
         try {   
           int result = dlclose(sharedLibHandle);
           if(result != 0){
@@ -149,7 +146,7 @@ class SharedLib{
       
       template<typename TSignature>
       TRYX_API_EXP static TSignature GetFunctionPointer(Handle sharedLibHandle,
-                        const char* funcname){
+                        const char* funcname) {
         void* funcAddress;
         try {
           dlerror();

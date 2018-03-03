@@ -45,15 +45,35 @@ unset(_expectedTargets)
 add_library(TryxPS::tryxps STATIC IMPORTED)
 
 set_target_properties(TryxPS::tryxps PROPERTIES
-  INTERFACE_INCLUDE_DIRECTORIES "/home/neelz/Programming_Workspace/C++_Workspace/Ma_Projects/CLI_Projects/TryxPS/include;/home/neelz/Programming_Workspace/C++_Workspace/Ma_Projects/CLI_Projects/TryxPS;/home/neelz/Programming_Workspace/C++_Workspace/Ma_Projects/CLI_Projects/TryxPS"
-  INTERFACE_LINK_LIBRARIES "dl"
+  INTERFACE_INCLUDE_DIRECTORIES "D:/Programming_Workspace/C++_Workspace/CLI_Projects/TryxPS/include;D:/Programming_Workspace/C++_Workspace/CLI_Projects/TryxPS;D:/Programming_Workspace/C++_Workspace/CLI_Projects/TryxPS"
 )
 
-# Import target "TryxPS::tryxps" for configuration ""
-set_property(TARGET TryxPS::tryxps APPEND PROPERTY IMPORTED_CONFIGURATIONS NOCONFIG)
+# Import target "TryxPS::tryxps" for configuration "Debug"
+set_property(TARGET TryxPS::tryxps APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
 set_target_properties(TryxPS::tryxps PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_NOCONFIG "CXX"
-  IMPORTED_LOCATION_NOCONFIG "/home/neelz/Programming_Workspace/C++_Workspace/Ma_Projects/CLI_Projects/TryxPS/libtryxps.a"
+  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
+  IMPORTED_LOCATION_DEBUG "D:/Programming_Workspace/C++_Workspace/CLI_Projects/TryxPS/Debug/tryxps.lib"
+  )
+
+# Import target "TryxPS::tryxps" for configuration "Release"
+set_property(TARGET TryxPS::tryxps APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+set_target_properties(TryxPS::tryxps PROPERTIES
+  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
+  IMPORTED_LOCATION_RELEASE "D:/Programming_Workspace/C++_Workspace/CLI_Projects/TryxPS/Release/tryxps.lib"
+  )
+
+# Import target "TryxPS::tryxps" for configuration "MinSizeRel"
+set_property(TARGET TryxPS::tryxps APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
+set_target_properties(TryxPS::tryxps PROPERTIES
+  IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
+  IMPORTED_LOCATION_MINSIZEREL "D:/Programming_Workspace/C++_Workspace/CLI_Projects/TryxPS/MinSizeRel/tryxps.lib"
+  )
+
+# Import target "TryxPS::tryxps" for configuration "RelWithDebInfo"
+set_property(TARGET TryxPS::tryxps APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
+set_target_properties(TryxPS::tryxps PROPERTIES
+  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
+  IMPORTED_LOCATION_RELWITHDEBINFO "D:/Programming_Workspace/C++_Workspace/CLI_Projects/TryxPS/RelWithDebInfo/tryxps.lib"
   )
 
 # This file does not depend on other imported targets which have

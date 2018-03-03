@@ -39,7 +39,7 @@ namespace Tryx {
       if(!addIt)
         return;
       WIN32_FIND_DATA fd;
-      char fname[256];
+      char fname[1024];
       strcpy(fname,const_cast<char*>(path.c_str()));
       size_t len=strlen(fname);
       if(fname[len-1]=='/' || fname[len-1]=='\\')  strcat(fname,"*.dll");
@@ -62,7 +62,7 @@ namespace Tryx {
             {
               curPlugin = new Plugin(static_cast<SharedLib::Handle>
                                     (dllHandle),std::string(fd.cFileName));
-              loadedPlugins.pushBack(std::string(curPlugin->getName()),curPlugin);
+              loadedPlugins.push_back(new Node(std::string(curPlugin->getName()), curPlugin));
               delete curPlugin; curPlugin = nullptr;
             }
             FreeLibrary(dllHandle);
@@ -155,7 +155,7 @@ namespace Tryx {
   }  
 
   PluginInterface* Kernel :: getFuncHandle(const std::string& iden) {
-    PluginInterface* p_plugin;
+    PluginInterface* p_plugin = nullptr;
     try {
       for(auto* i : loadedPlugins) {
         if(i->getName() == iden) {
